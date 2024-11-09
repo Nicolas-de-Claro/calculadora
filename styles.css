@@ -7,7 +7,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     background-color: #FFFFFF;
     display: flex;
     justify-content: center;
@@ -74,10 +74,20 @@ select, input[type="checkbox"], input[type="radio"] {
     text-align: center;
     box-sizing: border-box;
     transition: border-color 0.3s;
+    appearance: none;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIj48cGF0aCBkPSJNNSA3bDMtMy0zLTMtMyAzIDMgM3oiIGZpbGw9IiM0QTRENGEiLz48L3N2Zz4=');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
 }
 
 select:hover, input[type="checkbox"]:hover, input[type="radio"]:hover {
     border-color: var(--primary-color);
+}
+
+select:focus, input[type="checkbox"]:focus, input[type="radio"]:focus, .add-line-btn:focus, .remove-line-btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .add-line-btn {
@@ -89,13 +99,19 @@ select:hover, input[type="checkbox"]:hover, input[type="radio"]:hover {
     cursor: pointer;
     border-radius: 5px;
     margin: 0 auto;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
     width: 100%;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .add-line-btn:hover {
     background-color: #C50000;
+}
+
+.add-line-btn:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: scale(0.98);
 }
 
 .remove-line-btn {
@@ -106,12 +122,18 @@ select:hover, input[type="checkbox"]:hover, input[type="radio"]:hover {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
     align-self: flex-start;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .remove-line-btn:hover {
     background-color: #C50000;
+}
+
+.remove-line-btn:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: scale(0.98);
 }
 
 .total {
@@ -150,4 +172,3 @@ a:hover {
         opacity: 1;
     }
 }
-
