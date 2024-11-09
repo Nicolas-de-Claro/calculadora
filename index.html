@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Precio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>CALCULADORA DE PRECIOS</h1>
+    </div>
+
+    <div class="internet-options">
+      <label for="internet-speed">Velocidad de Internet</label>
+      <select id="internet-speed">
+        <option value="no">NO</option>
+        <option value="100">100 MB</option>
+        <option value="300">300 MB</option>
+        <option value="600">600 MB</option>
+      </select>
+
+      <div class="option">
+        <label for="add-tv">Con TV?</label>
+        <select id="add-tv">
+          <option value="no">NO</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="option">
+        <label for="has-claro-abono">Tiene abono de Claro el titular?</label>
+        <select id="has-claro-abono">
+          <option value="no">NO</option>
+          <option value="1">1</option>
+          <option value="2">2 o más</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="portability-section">
+      <div class="portability">
+        <label for="port-request">Solicita porta de</label>
+        <select name="port-request" class="port-request">
+          <option value="no">NO</option>
+          <option value="linea_nueva">Línea Nueva</option>
+          <option value="personal">Personal</option>
+          <option value="movistar">Movistar</option>
+          <option value="tuenti">Tuenti</option>
+        </select>
+
+        <label for="data-amount">Cantidad de gigas</label>
+        <select name="data-amount" class="data-amount" disabled>
+          <option value="2">2 GB</option>
+          <option value="4">4 GB</option>
+          <option value="7">7 GB</option>
+          <option value="10">10 GB</option>
+          <option value="20">20 GB</option>
+          <option value="30">30 GB</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="add-line-btn" onclick="addPortabilitySection()">Sumar otra línea</button>
+
+    <div class="total">
+      <h2>Total</h2>
+      <p id="total-price">$0.00</p>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
