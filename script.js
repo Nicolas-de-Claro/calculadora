@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const TV_PRICES = {
-    1: 14000,
-    2: 17000,
-    3: 20000,
+    1: 16000,
+    2: 19000,
+    3: 22000,
   };
 
   const CLARO_ABONO_DISCOUNTS = {
