@@ -1,112 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora de Precios</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    <div class="main-container">
-      <header class="header">
-        <h1>Calculadora de Precios</h1>
-        <button id="config-btn" class="config-btn" aria-label="Configuración">⚙️</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Precios</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="main-container">
+    <header class="header">
+      <h1>Calculadora de Precios</h1>
+      <button id="config-btn" class="config-btn" aria-label="Configuración">⚙️</button>
+    </header>
+
+    <main class="calculator-body">
+      <!-- Card de Internet y TV -->
+      <div class="card">
+        <h2 class="card-title">Internet y TV</h2>
+        <div class="option">
+          <label for="baf-type">Tipo de Plan</label>
+          <select id="baf-type">
+            <option value="RESIDENCIAL">BAF Residencial</option>
+            <option value="IP_DINAMICA">BAF IP Dinámica</option>
+            <option value="IP_FIJA">BAF IP Fija</option>
+          </select>
+        </div>
+        <div class="option">
+          <label for="internet-speed">Velocidad de Internet</label>
+          <select id="internet-speed">
+            <option value="no">No incluir</option>
+            <option value="100">100 MB</option>
+            <option value="300">300 MB</option>
+            <option value="600">600 MB</option>
+          </select>
+        </div>
+        <div class="option">
+          <label for="add-tv">Servicio de TV</label>
+          <select id="add-tv">
+            <option value="no">No incluir</option>
+            <option value="1">1 Deco</option>
+            <option value="2">2 Decos</option>
+            <option value="3">3 Decos</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sección de Portabilidad -->
+      <div id="portability-section"></div>
+
+      <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
+
+      <!-- Opciones de Pago -->
+      <div class="card">
+        <h2 class="card-title">Beneficios</h2>
+        <div class="option">
+          <label for="has-claro-abono">Descuento Abono Claro</label>
+          <select id="has-claro-abono">
+            <option value="no">No tiene</option>
+            <option value="1">1 Línea</option>
+            <option value="2">2 o más</option>
+          </select>
+        </div>
+        <div class="payment-option">
+          <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="pack-futbol-checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="payment-option">
+          <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="claro-pay-checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Card de Total -->
+      <div class="total-card">
+        <div id="price-breakdown"></div>
+        <hr class="total-separator" style="display: none;" />
+        <div class="total-final">
+          <h2>Total Mensual</h2>
+          <p id="total-price">$0.00</p>
+        </div>
+        <button id="copy-summary-btn" class="copy-btn">Copiar Resumen</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal for configuration -->
+  <div id="config-modal" class="modal">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>Configuración de Precios</h2>
+        <span class="close-btn">&times;</span>
       </header>
-
-      <main class="calculator-body">
-        <!-- Card de Internet y TV -->
-        <div class="card">
-          <h2 class="card-title">Internet y TV</h2>
-          <div class="option">
-            <label for="baf-type">Tipo de Plan</label>
-            <select id="baf-type">
-              <option value="RESIDENCIAL">BAF Residencial</option>
-              <option value="IP_DINAMICA">BAF IP Dinámica</option>
-              <option value="IP_FIJA">BAF IP Fija</option>
-            </select>
-          </div>
-          <div class="option">
-            <label for="internet-speed">Velocidad de Internet</label>
-            <select id="internet-speed">
-              <option value="no">No incluir</option>
-              <option value="100">100 MB</option>
-              <option value="300">300 MB</option>
-              <option value="600">600 MB</option>
-            </select>
-          </div>
-          <div class="option">
-            <label for="add-tv">Servicio de TV</label>
-            <select id="add-tv">
-              <option value="no">No incluir</option>
-              <option value="1">1 Deco</option>
-              <option value="2">2 Decos</option>
-              <option value="3">3 Decos</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Sección de Portabilidad -->
-        <div id="portability-section"></div>
-
-        <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
-
-        <!-- Opciones de Pago -->
-        <div class="card">
-          <h2 class="card-title">Beneficios</h2>
-            <div class="option">
-              <label for="has-claro-abono">Descuento Abono Claro</label>
-              <select id="has-claro-abono">
-                <option value="no">No tiene</option>
-                <option value="1">1 Línea</option>
-                <option value="2">2 o más</option>
-              </select>
-            </div>
-            <div class="payment-option">
-                <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="pack-futbol-checkbox"/>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="payment-option">
-                <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="claro-pay-checkbox"/>
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Card de Total -->
-        <div class="total-card">
-          <div id="price-breakdown"></div>
-          <hr class="total-separator" style="display: none;"/>
-          <div class="total-final">
-            <h2>Total Mensual</h2>
-            <p id="total-price">$0.00</p>
-          </div>
-          <button id="copy-summary-btn" class="copy-btn">Copiar Resumen</button>
-        </div>
-      </main>
-    </div>
-
-    <!-- Modal for configuration -->
-    <div id="config-modal" class="modal">
-      <div class="modal-content">
-        <header class="modal-header">
-          <h2>Configuración de Precios</h2>
-          <span class="close-btn">&times;</span>
-        </header>
-        <div id="config-form"></div>
+      <div id="validation-error" style="display: none;"></div>
+      <textarea id="json-editor" spellcheck="false"></textarea>
+      <div class="modal-actions">
+        <button id="format-json-btn" class="secondary-btn">Formatear</button>
         <button id="save-config-btn">Guardar Cambios</button>
       </div>
     </div>
+  </div>
 
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
+
 </html>

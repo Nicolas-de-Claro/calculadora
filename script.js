@@ -267,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (event.target == configModal) { configModal.style.display = "none"; }
     });
     saveConfigBtn.addEventListener("click", saveConfig);
+    document.getElementById("format-json-btn").addEventListener("click", formatJsonEditor);
 
     // Listener para copiar el resumen
     document.getElementById('copy-summary-btn').addEventListener('click', copySummary);
@@ -415,11 +416,27 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   function populateConfigForm() {
     const jsonEditor = document.getElementById("json-editor");
-    // Safety check: Ensure prices is an object to prevent double-stringification
+
+    // Ensure prices is an object (handle potentially double-stringified data from localStorage)
     if (typeof prices === 'string') {
-      try { prices = JSON.parse(prices); } catch (e) { console.error("Error parsing prices string:", e); }
+      try {
+        prices = JSON.parse(prices);
+      } catch (e) {
+        console.error("Error repairing prices object:", e);
+      }
     }
+
     jsonEditor.value = JSON.stringify(prices, null, 2);
+  }
+
+  function formatJsonEditor() {
+    const jsonEditor = document.getElementById("json-editor");
+    try {
+      const currentContent = JSON.parse(jsonEditor.value);
+      jsonEditor.value = JSON.stringify(currentContent, null, 2);
+    } catch (e) {
+      alert("No se puede formatear porque el JSON tiene errores.");
+    }
   }
 
   // --- Carga Inicial de la Aplicación ---
