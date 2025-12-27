@@ -77,15 +77,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Calcula el costo de Internet y TV y lo añade al subtotal y al desglose
     const internetTvResult = getInternetAndTvCost(bafTypeValue, internetSpeedValue, addTvValue);
     if (internetTvResult.price > 0) {
-        subtotal += internetTvResult.price;
-        breakdownItems.push(...internetTvResult.breakdown);
+      subtotal += internetTvResult.price;
+      breakdownItems.push(...internetTvResult.breakdown);
     }
 
     // Calcula el descuento por Abono Claro y lo aplica al subtotal y al desglose
     const claroAbonoResult = getClaroAbonoDiscount(hasClaroAbono.value);
     if (claroAbonoResult.discount > 0) {
-        subtotal -= claroAbonoResult.discount;
-        breakdownItems.push(claroAbonoResult.breakdown);
+      subtotal -= claroAbonoResult.discount;
+      breakdownItems.push(claroAbonoResult.breakdown);
     }
 
     // Calcula el costo del Pack Fútbol
@@ -98,18 +98,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Itera sobre cada línea móvil añadida para calcular su costo y añadirlo al subtotal y al desglose
     const portRequests = portRequestContainer.querySelectorAll(".portability");
     portRequests.forEach(function (portRequest, index) {
-        const lineResult = getLineCost(portRequest, index);
-        if (lineResult.price > 0) {
-            subtotal += lineResult.price;
-            breakdownItems.push(lineResult.breakdown);
-        }
+      const lineResult = getLineCost(portRequest, index);
+      if (lineResult.price > 0) {
+        subtotal += lineResult.price;
+        breakdownItems.push(lineResult.breakdown);
+      }
     });
 
     // Calcula el cashback de Claro Pay y lo aplica al subtotal y al desglose
     const claroPayResult = getClaroPayCashback(subtotal);
     if (claroPayResult.cashback > 0) {
-        subtotal -= claroPayResult.cashback;
-        breakdownItems.push(claroPayResult.breakdown);
+      subtotal -= claroPayResult.cashback;
+      breakdownItems.push(claroPayResult.breakdown);
     }
 
     // Renderiza el desglose de precios en la interfaz
@@ -197,12 +197,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function getClaroPayCashback(currentSubtotal) {
     let cashback = 0;
     let breakdownItem = null;
-    if(claroPayCheckbox.checked && prices.CLARO_PAY){
-        const calculatedCashback = currentSubtotal * prices.CLARO_PAY.CASHBACK_PERCENTAGE;
-        cashback = Math.min(calculatedCashback, prices.CLARO_PAY.CASHBACK_CAP);
-        if(cashback > 0){
-            breakdownItem = { label: `Cashback Claro Pay`, value: -cashback };
-        }
+    if (claroPayCheckbox.checked && prices.CLARO_PAY) {
+      const calculatedCashback = currentSubtotal * prices.CLARO_PAY.CASHBACK_PERCENTAGE;
+      cashback = Math.min(calculatedCashback, prices.CLARO_PAY.CASHBACK_CAP);
+      if (cashback > 0) {
+        breakdownItem = { label: `Cashback Claro Pay`, value: -cashback };
+      }
     }
     return { cashback, breakdown: breakdownItem };
   }
@@ -256,15 +256,15 @@ document.addEventListener("DOMContentLoaded", function () {
     hasClaroAbono.addEventListener("change", calculateTotalPrice);
     packFutbolCheckbox.addEventListener("change", calculateTotalPrice); // Listener para Pack Fútbol
     claroPayCheckbox.addEventListener('change', calculateTotalPrice);
-    
+
     // Listener para el botón de añadir línea móvil
     addLineBtn.addEventListener("click", () => addPortabilitySection(false));
 
     // Listeners para el modal de configuración
     configBtn.addEventListener("click", () => { populateConfigForm(); configModal.style.display = "block"; });
     closeModalBtn.addEventListener("click", () => { configModal.style.display = "none"; });
-    window.addEventListener("click", (event) => { 
-        if (event.target == configModal) { configModal.style.display = "none"; } 
+    window.addEventListener("click", (event) => {
+      if (event.target == configModal) { configModal.style.display = "none"; }
     });
     saveConfigBtn.addEventListener("click", saveConfig);
 
@@ -370,80 +370,56 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Lógica del Modal de Configuración ---
 
   /**
-   * Guarda los precios editados en localStorage y cierra el modal.
+   * Guarda los precios editados desde el editor JSON en localStorage y cierra el modal.
+   * Valida que el JSON sea válido antes de guardar.
    */
   function saveConfig() {
-    const inputs = configForm.querySelectorAll("input[data-key]");
-    inputs.forEach(input => {
-        const keys = input.dataset.key.split('.');
-        let temp = prices;
-        for(let i = 0; i < keys.length - 1; i++){
-            temp = temp[keys[i]];
-        }
-        temp[keys[keys.length - 1]] = parseFloat(input.value) || 0;
-    });
-    localStorage.setItem("calculatorPrices", JSON.stringify(prices));
-    configModal.style.display = "none";
-    calculateTotalPrice();
+    const jsonEditor = document.getElementById("json-editor");
+    const errorContainer = document.getElementById("validation-error");
+
+    // Reset error state
+    errorContainer.style.display = "none";
+    errorContainer.textContent = "";
+    jsonEditor.style.borderColor = "";
+
+    try {
+      const newPrices = JSON.parse(jsonEditor.value);
+
+      // Basic validation
+      if (!newPrices || typeof newPrices !== 'object') {
+        throw new Error("El contenido debe ser un objeto JSON válido.");
+      }
+
+      prices = newPrices;
+      localStorage.setItem("calculatorPrices", JSON.stringify(prices));
+
+      calculateTotalPrice();
+
+      configModal.style.display = "none";
+      alert("Precios actualizados correctamente.");
+    } catch (e) {
+      console.error("Error saving config:", e);
+
+      // Show error in UI
+      errorContainer.textContent = `⚠️ Error en JSON: ${e.message}`;
+      errorContainer.style.display = "block";
+      jsonEditor.style.borderColor = "#c62828";
+
+      // Scroll to top of modal to see error if needed
+      configModal.querySelector('.modal-content').scrollTop = 0;
+    }
   }
 
   /**
-   * Rellena el formulario del modal de configuración con los precios actuales.
-   * Crea dinámicamente los campos de entrada basados en la estructura del objeto `prices`.
+   * Rellena el textarea del modal de configuración con el JSON de precios actual.
    */
   function populateConfigForm() {
-    configForm.innerHTML = ""; // Limpia el formulario antes de rellenarlo
-
-    /**
-     * Crea un campo de entrada para un precio individual.
-     * @param {string} key - La ruta completa de la clave del precio (ej. "BAF.RESIDENCIAL.internet.100").
-     * @param {string} label - La etiqueta a mostrar junto al campo de entrada.
-     * @param {number} value - El valor actual del precio.
-     */
-    const createInput = (key, label, value) => {
-        const group = document.createElement('div');
-        group.className = 'price-input-group';
-        const labelEl = document.createElement('label');
-        labelEl.textContent = label;
-        const inputEl = document.createElement('input');
-        inputEl.type = 'number';
-        inputEl.value = value;
-        inputEl.dataset.key = key; // Almacena la ruta de la clave en un atributo de datos
-        group.appendChild(labelEl);
-        group.appendChild(inputEl);
-        configForm.appendChild(group);
-    };
-
-    /**
-     * Recorre recursivamente el objeto de precios para crear los campos de entrada.
-     * @param {object} obj - El objeto (o sub-objeto) de precios actual.
-     * @param {string} path - La ruta de la clave actual (para construir el data-key).
-     * @param {number} level - El nivel de anidamiento actual (para los títulos).
-     */
-    const traverseObject = (obj, path, level) => {
-        // Crea un título para la categoría actual
-        const title = document.createElement(`h${level > 4 ? 4 : level}`);
-        title.textContent = path.split('.').pop().replace(/_/g, ' ');
-        configForm.appendChild(title);
-
-        for (const key in obj) {
-            const newPath = path ? `${path}.${key}` : key;
-            const currentValue = obj[key];
-
-            if (typeof currentValue === 'object' && currentValue !== null) {
-                // Si es un objeto, llama a la función recursivamente para el siguiente nivel
-                traverseObject(currentValue, newPath, level + 1);
-            } else {
-                // Si es un valor (precio), crea el campo de entrada
-                createInput(newPath, key.replace(/_/g, ' ') + ':', currentValue);
-            }
-        }
-    };
-
-    // Inicia el recorrido del objeto de precios desde la categoría principal
-    for (const category in prices) {
-        traverseObject(prices[category], category, 3);
+    const jsonEditor = document.getElementById("json-editor");
+    // Safety check: Ensure prices is an object to prevent double-stringification
+    if (typeof prices === 'string') {
+      try { prices = JSON.parse(prices); } catch (e) { console.error("Error parsing prices string:", e); }
     }
+    jsonEditor.value = JSON.stringify(prices, null, 2);
   }
 
   // --- Carga Inicial de la Aplicación ---
