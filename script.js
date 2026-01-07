@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Añade el costo de Internet si está disponible
     if (prices.BAF[bafTypeValue]?.internet?.[internetSpeedValue]) {
       price += prices.BAF[bafTypeValue].internet[internetSpeedValue];
-      breakdown.push({ label: `Internet ${internetSpeedValue}MB`, value: prices.BAF[bafTypeValue].internet[internetSpeedValue] });
+      breakdown.push({ label: `Internet ${internetSpeedValue}MB + Linea Fija`, value: prices.BAF[bafTypeValue].internet[internetSpeedValue] });
     }
 
     // Añade el costo de TV si está disponible (depende del tipo de BAF)
@@ -241,6 +241,35 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   function formatCurrency(value) {
     return `$${value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/\.(?=\d{2}$)/, ",")}`;
+  }
+
+  /**
+   * Copia el resumen del pedido al portapapeles con formato para WhatsApp.
+   */
+  function copySummary() {
+    const breakdownItems = document.querySelectorAll('#price-breakdown .breakdown-item');
+    let text = "*Resumen del Plan*\n\n";
+
+    breakdownItems.forEach(item => {
+      const label = item.querySelector('.label').innerText;
+      const value = item.querySelector('.value').innerText;
+      text += `- *${label}*: ${value}\n`;
+    });
+
+    const total = document.getElementById('total-price').innerText;
+    text += `\n*Total Mensual: ${total}*`;
+
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        const btn = document.getElementById('copy-summary-btn');
+        const originalText = btn.textContent;
+        btn.textContent = "¡Copiado!";
+        setTimeout(() => btn.textContent = originalText, 2000);
+      })
+      .catch(err => {
+        console.error('Error al copiar: ', err);
+        alert('No se pudo copiar al portapapeles');
+      });
   }
 
   // --- Gestión de Eventos ---
