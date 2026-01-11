@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de precios para planes de Internet, TV y líneas móviles" />
+  <meta name="theme-color" content="#D32F2F" />
   <title>Calculadora de Precios</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -11,9 +13,12 @@
 
 <body>
   <div class="main-container">
-    <header class="header">
+    <header class="header" role="banner">
       <h1>Calculadora de Precios</h1>
-      <button id="config-btn" class="config-btn" aria-label="Configuración">⚙️</button>
+      <div class="header-buttons">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Cambiar tema">🌙</button>
+        <button id="config-btn" class="config-btn" aria-label="Abrir configuración de precios">⚙️</button>
+      </div>
     </header>
 
     <main class="calculator-body">
@@ -109,7 +114,7 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 
 </html>
