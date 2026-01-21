@@ -104,13 +104,6 @@ export function exportToPdf() {
     doc.setFontSize(16);
     doc.text(total, pageWidth - 30, yPos + 5, { align: 'right' });
 
-    // ========== Footer ==========
-    const pageHeight = doc.internal.pageSize.getHeight();
-    doc.setTextColor(150, 150, 150);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Calculadora de Precios - Los precios pueden variar sin previo aviso', pageWidth / 2, pageHeight - 10, { align: 'center' });
-
     // ========== Descargar PDF ==========
     doc.save(`cotizacion_${new Date().toISOString().split('T')[0]}.pdf`);
 }

@@ -213,11 +213,7 @@ function attachEventListeners() {
   // Toggle gráfico
   document.getElementById('toggle-chart-btn')?.addEventListener('click', toggleChartView);
 
-  // Modo compacto
-  document.getElementById('compact-mode-checkbox')?.addEventListener('change', toggleCompactMode);
 
-  // Cargar preferencia de modo compacto
-  loadCompactModePreference();
 }
 
 // ========== Gestión de Líneas Móviles ==========
@@ -349,43 +345,5 @@ function toggleChartView() {
       }
     });
     updateChart(breakdownItems);
-  }
-}
-
-// ========== Compact Mode ==========
-
-function toggleCompactMode(event) {
-  const isCompact = event.target.checked;
-  const container = document.querySelector('.main-container');
-
-  if (isCompact) {
-    container.setAttribute('data-view', 'compact');
-  } else {
-    container.removeAttribute('data-view');
-  }
-
-  // Guardar preferencia
-  try {
-    localStorage.setItem('compactMode', isCompact ? 'true' : 'false');
-  } catch (e) {
-    console.error('Error guardando preferencia de modo compacto:', e);
-  }
-}
-
-function loadCompactModePreference() {
-  try {
-    const isCompact = localStorage.getItem('compactMode') === 'true';
-    const checkbox = document.getElementById('compact-mode-checkbox');
-    const container = document.querySelector('.main-container');
-
-    if (checkbox) {
-      checkbox.checked = isCompact;
-    }
-
-    if (isCompact && container) {
-      container.setAttribute('data-view', 'compact');
-    }
-  } catch (e) {
-    console.error('Error cargando preferencia de modo compacto:', e);
   }
 }
