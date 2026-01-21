@@ -1,0 +1,20 @@
+{
+    "cargaCliente": [
+        {
+            "id": "inter-baf",
+            "nombre": "INTER BAF",
+            "descripcion": "Formulario Inter",
+            "icono": "🌐",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSfq6KISf_PH-rdXuUMY3XNCGTgNTAlFhhU_B5n-s2cVaIcpLA/viewform",
+            "color": "#4285F4"
+        },
+        {
+            "id": "teccom-baf",
+            "nombre": "TECCOM BAF",
+            "descripcion": "Formulario Teccom",
+            "icono": "📡",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSct1UOMfgdBxdmBEpiqxoSOxoJjDvP2zIDdrhyoWpfz2eTcEw/viewform",
+            "color": "#34A853"
+        }
+    ]
+}

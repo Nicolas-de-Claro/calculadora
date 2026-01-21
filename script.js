@@ -60,6 +60,12 @@ function initializeApp() {
     calculateTotalPriceDebounced();
   });
 
+  // Inicializar tabs de navegación
+  initTabs();
+
+  // Cargar botones de carga de cliente
+  loadCargaButtons();
+
   // Adjuntar event listeners
   attachEventListeners();
 
@@ -187,9 +193,84 @@ function attachEventListeners() {
 
   // Toggle gráfico
   document.getElementById('toggle-chart-btn')?.addEventListener('click', toggleChartView);
-
-
 }
+
+// ========== Navegación por Tabs ==========
+
+function initTabs() {
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const pageTitle = document.getElementById('page-title');
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+
+      // Actualizar botones
+      tabButtons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      // Actualizar contenido
+      tabContents.forEach(content => {
+        const isTarget = content.id === `tab-${targetTab}`;
+        content.classList.toggle('active', isTarget);
+        content.hidden = !isTarget;
+      });
+
+      // Actualizar título de la página
+      if (targetTab === 'calculadora') {
+        pageTitle.textContent = 'Calculadora de Precios';
+      } else if (targetTab === 'carga') {
+        pageTitle.textContent = 'Carga de Cliente';
+      }
+    });
+  });
+}
+
+// ========== Carga de Botones Dinámicos ==========
+
+async function loadCargaButtons() {
+  try {
+    const response = await fetch('links.json');
+    if (!response.ok) throw new Error('No se pudo cargar links.json');
+
+    const data = await response.json();
+    const container = document.getElementById('carga-buttons');
+
+    if (!container || !data.cargaCliente) return;
+
+    container.innerHTML = '';
+
+    data.cargaCliente.forEach(item => {
+      const link = document.createElement('a');
+      link.href = item.url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className = 'carga-link-btn';
+      link.id = item.id;
+
+      link.innerHTML = `
+        <span class="carga-link-icon" style="background-color: ${item.color}20; color: ${item.color}">
+          ${item.icono}
+        </span>
+        <div class="carga-link-content">
+          <span class="carga-link-title">${item.nombre}</span>
+          <span class="carga-link-desc">${item.descripcion}</span>
+        </div>
+        <span class="carga-link-arrow">→</span>
+      `;
+
+      container.appendChild(link);
+    });
+  } catch (error) {
+    console.error('Error cargando botones de carga:', error);
+  }
+}
+
 
 // ========== Gestión de Líneas Móviles ==========
 
