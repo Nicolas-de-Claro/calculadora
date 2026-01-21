@@ -43,7 +43,6 @@ export const DOM_SELECTORS = {
 
 // Claves de localStorage
 export const STORAGE_KEYS = {
-    PRICES: 'calculatorPrices',
     THEME: 'calculatorTheme'
 };
 

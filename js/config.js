@@ -4,7 +4,6 @@
 
 import { DOM_SELECTORS, ERROR_MESSAGES } from './constants.js';
 import { validatePricesStructure, safeJsonParse } from './utils.js';
-import { savePrices } from './storage.js';
 import { showError, hideError } from './ui.js';
 
 /**
@@ -54,7 +53,7 @@ export function formatJsonEditor() {
 }
 
 /**
- * Guarda la configuración del editor JSON
+ * Guarda la configuración del editor JSON (solo en memoria, no en localStorage)
  * @param {Function} onSuccess - Callback cuando se guarda exitosamente
  * @returns {{success: boolean, prices: Object|null, error: string|null}}
  */
@@ -84,15 +83,7 @@ export function saveConfigFromEditor(onSuccess) {
         return { success: false, prices: null, error: validationError };
     }
 
-    // Guardar en localStorage
-    const saved = savePrices(newPrices);
-
-    if (!saved) {
-        showError('Error al guardar en almacenamiento local');
-        return { success: false, prices: null, error: 'Storage error' };
-    }
-
-    // Éxito
+    // Éxito - aplicar cambios solo en memoria
     closeConfigModal();
 
     if (onSuccess) {
@@ -137,7 +128,7 @@ export function initConfigModal(prices, onPricesUpdate) {
             if (onPricesUpdate) {
                 onPricesUpdate(newPrices);
             }
-            alert(ERROR_MESSAGES.PRICES_UPDATED);
+            alert('Precios actualizados temporalmente.\nAl recargar la página se restaurarán los precios originales.');
         });
     });
 

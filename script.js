@@ -3,9 +3,9 @@
  * Refactorizado con ES6 modules, debounce y manejo de errores mejorado
  */
 
-import { DOM_SELECTORS, DEBOUNCE_DELAY, ERROR_MESSAGES, ANIMATION_DURATION, STORAGE_KEYS } from './js/constants.js';
+import { DOM_SELECTORS, DEBOUNCE_DELAY, ERROR_MESSAGES, ANIMATION_DURATION } from './js/constants.js';
 import { debounce, formatCurrency } from './js/utils.js';
-import { loadPricesFromStorage, loadPricesFromFile, savePrices } from './js/storage.js';
+import { loadPricesFromFile } from './js/storage.js';
 import {
   calculateInternetTvCost,
   calculateAbonoDiscount,
@@ -39,38 +39,13 @@ document.addEventListener('DOMContentLoaded', async function () {
   showLoading();
 
   try {
-    prices = await loadPrices();
+    prices = await loadPricesFromFile();
     initializeApp();
   } catch (error) {
     console.error('Error crítico al inicializar:', error);
     document.querySelector(DOM_SELECTORS.TOTAL_PRICE).textContent = 'Error al cargar';
   }
 });
-
-/**
- * Carga los precios con fallback
- */
-async function loadPrices() {
-  // Intentar cargar de localStorage primero
-  const { prices: storedPrices, error } = loadPricesFromStorage();
-
-  if (error) {
-    console.warn('Error en localStorage, cargando desde archivo:', error);
-  }
-
-  if (storedPrices) {
-    return storedPrices;
-  }
-
-  // Fallback: cargar desde archivo
-  try {
-    const filePrices = await loadPricesFromFile();
-    return filePrices;
-  } catch (fetchError) {
-    console.error('Error cargando prices.json:', fetchError);
-    throw new Error('No se pudieron cargar los precios');
-  }
-}
 
 /**
  * Inicializa la aplicación
