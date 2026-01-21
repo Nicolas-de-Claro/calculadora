@@ -3,22 +3,22 @@
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_NAME = 'calculadora-v1';
+const CACHE_NAME = 'calculadora-v2';
 const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/script.js',
-    '/prices.json',
-    '/js/constants.js',
-    '/js/utils.js',
-    '/js/storage.js',
-    '/js/calculator.js',
-    '/js/ui.js',
-    '/js/config.js',
-    '/manifest.json',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png'
+    './',
+    './index.html',
+    './styles.css',
+    './script.js',
+    './prices.json',
+    './js/constants.js',
+    './js/utils.js',
+    './js/storage.js',
+    './js/calculator.js',
+    './js/ui.js',
+    './js/config.js',
+    './manifest.json',
+    './icons/icon-192x192.png',
+    './icons/icon-512x512.png'
 ];
 
 // Instalación: cachear archivos estáticos
@@ -71,7 +71,7 @@ self.addEventListener('fetch', (event) => {
             .catch(() => {
                 // Fallback para páginas HTML
                 if (event.request.destination === 'document') {
-                    return caches.match('/index.html');
+                    return caches.match('./index.html');
                 }
             })
     );

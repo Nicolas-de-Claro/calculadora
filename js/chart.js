@@ -72,11 +72,12 @@ export function updateChart(breakdownItems) {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#212121',
+                        color: '#333333',
                         padding: 12,
                         usePointStyle: true,
                         font: {
-                            size: 11
+                            size: 11,
+                            weight: '500'
                         }
                     }
                 },
