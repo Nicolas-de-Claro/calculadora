@@ -6,9 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Calculadora de precios para planes de Internet, TV y líneas móviles" />
   <meta name="theme-color" content="#D32F2F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Calculadora de Precios</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+  <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- Chart.js for pie chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -93,9 +102,28 @@
           <h2>Total Mensual</h2>
           <p id="total-price">$0.00</p>
         </div>
-        <button id="copy-summary-btn" class="copy-btn">Copiar Resumen</button>
+
+        <!-- Action buttons -->
+        <div class="action-buttons">
+          <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
+          <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
+          <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
+        </div>
+
+        <!-- Chart container (hidden by default) -->
+        <div id="chart-container" class="chart-container" style="display: none;">
+          <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
+        </div>
       </div>
     </main>
+
+    <!-- Compact mode toggle -->
+    <div class="view-toggle">
+      <label class="compact-toggle">
+        <input type="checkbox" id="compact-mode-checkbox" />
+        <span>Vista compacta</span>
+      </label>
+    </div>
   </div>
 
   <!-- Modal for configuration -->
@@ -115,6 +143,16 @@
   </div>
 
   <script type="module" src="script.js"></script>
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.log('SW error:', err));
+      });
+    }
+  </script>
 </body>
 
 </html>

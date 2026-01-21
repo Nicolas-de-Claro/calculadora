@@ -624,3 +624,130 @@ button.success {
     background-color: var(--success-color) !important;
     border-color: var(--success-color) !important;
 }
+
+/* ========== Action Buttons Row ========== */
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.action-buttons .copy-btn {
+    flex: 1;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+}
+
+/* ========== Chart Container ========== */
+
+.chart-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.chart-container canvas {
+    max-height: 250px;
+}
+
+/* ========== View Toggle (Compact Mode) ========== */
+
+.view-toggle {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.compact-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.compact-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ========== Compact Mode Styles ========== */
+
+[data-view="compact"] .card,
+[data-view="compact"] .total-card {
+    padding: 0.6rem;
+    margin: 0.5rem 0;
+    gap: 0.5rem;
+}
+
+[data-view="compact"] .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+[data-view="compact"] .option {
+    gap: 0.25rem;
+}
+
+[data-view="compact"] label {
+    font-size: 0.8rem;
+}
+
+[data-view="compact"] select {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+[data-view="compact"] .add-line-btn {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+}
+
+[data-view="compact"] .total-final h2 {
+    font-size: 1rem;
+}
+
+[data-view="compact"] .total-final #total-price {
+    font-size: 1.5rem;
+}
+
+[data-view="compact"] .breakdown-item {
+    font-size: 0.85rem;
+}
+
+[data-view="compact"] .action-buttons .copy-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+}
+
+[data-view="compact"] #portability-section {
+    gap: 0.75rem;
+}
+
+[data-view="compact"] .header h1 {
+    font-size: 1.2rem;
+}
+
+[data-view="compact"] .payment-option {
+    padding: 0.25rem 0;
+}
+
+[data-view="compact"] .toggle-switch {
+    width: 40px;
+    height: 22px;
+}
+
+[data-view="compact"] .slider:before {
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+}
+
+[data-view="compact"] input:checked+.slider:before {
+    transform: translateX(18px);
+}

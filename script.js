@@ -3,7 +3,7 @@
  * Refactorizado con ES6 modules, debounce y manejo de errores mejorado
  */
 
-import { DOM_SELECTORS, DEBOUNCE_DELAY, ERROR_MESSAGES, ANIMATION_DURATION } from './js/constants.js';
+import { DOM_SELECTORS, DEBOUNCE_DELAY, ERROR_MESSAGES, ANIMATION_DURATION, STORAGE_KEYS } from './js/constants.js';
 import { debounce, formatCurrency } from './js/utils.js';
 import { loadPricesFromStorage, loadPricesFromFile, savePrices } from './js/storage.js';
 import {
@@ -25,10 +25,13 @@ import {
   showButtonFeedback
 } from './js/ui.js';
 import { initConfigModal } from './js/config.js';
+import { exportToPdf } from './js/pdf-export.js';
+import { updateChart, toggleChartVisibility } from './js/chart.js';
 
 // Estado global de la aplicación
 let prices = {};
 let configModalRef = null;
+let chartVisible = false;
 
 // ========== Inicialización ==========
 
@@ -159,6 +162,11 @@ function calculateTotalPrice() {
   // Actualizar UI
   renderBreakdown(breakdownItems);
   updateTotalPrice(subtotal);
+
+  // Actualizar gráfico si está visible
+  if (chartVisible) {
+    updateChart(breakdownItems);
+  }
 }
 
 // Versión debounced del cálculo
@@ -198,6 +206,18 @@ function attachEventListeners() {
 
   // Toggle de tema
   document.querySelector(DOM_SELECTORS.THEME_TOGGLE_BTN)?.addEventListener('click', toggleTheme);
+
+  // Exportar a PDF
+  document.getElementById('export-pdf-btn')?.addEventListener('click', exportToPdf);
+
+  // Toggle gráfico
+  document.getElementById('toggle-chart-btn')?.addEventListener('click', toggleChartView);
+
+  // Modo compacto
+  document.getElementById('compact-mode-checkbox')?.addEventListener('change', toggleCompactMode);
+
+  // Cargar preferencia de modo compacto
+  loadCompactModePreference();
 }
 
 // ========== Gestión de Líneas Móviles ==========
@@ -300,10 +320,72 @@ function copySummary() {
   navigator.clipboard.writeText(text)
     .then(() => {
       const btn = document.querySelector(DOM_SELECTORS.COPY_SUMMARY_BTN);
-      showButtonFeedback(btn, '¡Copiado!', 'Copiar Resumen');
+      showButtonFeedback(btn, '¡Copiado!', '📋 Copiar');
     })
     .catch(err => {
       console.error('Error al copiar:', err);
       alert(ERROR_MESSAGES.COPY_ERROR);
     });
+}
+
+// ========== Chart Toggle ==========
+
+function toggleChartView() {
+  chartVisible = !chartVisible;
+  toggleChartVisibility(chartVisible);
+
+  const btn = document.getElementById('toggle-chart-btn');
+  btn.textContent = chartVisible ? '📊 Ocultar' : '📊 Gráfico';
+
+  if (chartVisible) {
+    // Obtener breakdown items actual
+    const breakdownItems = [];
+    document.querySelectorAll('#price-breakdown .breakdown-item').forEach(item => {
+      const label = item.querySelector('.label').textContent;
+      const valueText = item.querySelector('.value').textContent;
+      const value = parseFloat(valueText.replace(/[$.]/g, '').replace(',', '.'));
+      if (value > 0) {
+        breakdownItems.push({ label, value });
+      }
+    });
+    updateChart(breakdownItems);
+  }
+}
+
+// ========== Compact Mode ==========
+
+function toggleCompactMode(event) {
+  const isCompact = event.target.checked;
+  const container = document.querySelector('.main-container');
+
+  if (isCompact) {
+    container.setAttribute('data-view', 'compact');
+  } else {
+    container.removeAttribute('data-view');
+  }
+
+  // Guardar preferencia
+  try {
+    localStorage.setItem('compactMode', isCompact ? 'true' : 'false');
+  } catch (e) {
+    console.error('Error guardando preferencia de modo compacto:', e);
+  }
+}
+
+function loadCompactModePreference() {
+  try {
+    const isCompact = localStorage.getItem('compactMode') === 'true';
+    const checkbox = document.getElementById('compact-mode-checkbox');
+    const container = document.querySelector('.main-container');
+
+    if (checkbox) {
+      checkbox.checked = isCompact;
+    }
+
+    if (isCompact && container) {
+      container.setAttribute('data-view', 'compact');
+    }
+  } catch (e) {
+    console.error('Error cargando preferencia de modo compacto:', e);
+  }
 }
