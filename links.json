@@ -13,8 +13,40 @@
             "nombre": "TECCOM BAF",
             "descripcion": "Formulario Teccom",
             "icono": "📡",
-            "url": "https://docs.google.com/forms/d/e/1FAIpQLSct1UOMfgdBxdmBEpiqxoSOxoJjDvP2zIDdrhyoWpfz2eTcEw/viewform",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSdUdZYmbU_CxFgMgfT7PPrh5HnIyG-V2wfUlAEKBO9H24qSPA/viewform",
             "color": "#34A853"
+        },
+        {
+            "id": "teccom-manantial",
+            "nombre": "TECCOM Manantial Sur",
+            "descripcion": "Formulario Teccom Manantial",
+            "icono": "🏘️",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSct1UOMfgdBxdmBEpiqxoSOxoJjDvP2zIDdrhyoWpfz2eTcEw/viewform",
+            "color": "#00897B"
+        },
+        {
+            "id": "movil-noa",
+            "nombre": "MOVIL-NOA BAF",
+            "descripcion": "Planilla MOVIL-NOA",
+            "icono": "📱",
+            "url": "https://docs.google.com/spreadsheets/d/1gnS4vazV_ThsMTOctU-zdp50CorsV2TgjwZv5itOImo/edit?gid=0#gid=0",
+            "color": "#9C27B0"
+        },
+        {
+            "id": "inter-porta",
+            "nombre": "INTER PORTA",
+            "descripcion": "Formulario Inter Portabilidad",
+            "icono": "🔄",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSciCmKv7dpINjRMlYQwSvusSQABnSQWemwwxSP1fMbBvO-AHw/viewform",
+            "color": "#1976D2"
+        },
+        {
+            "id": "teccom-porta",
+            "nombre": "TECCOM PORTA",
+            "descripcion": "Formulario Teccom Portabilidad",
+            "icono": "📲",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSdTalYs07vwp1biVl7ASCTraJytRkTKscfz9P8-6vUQZJnycg/viewform?fbzx=7281803629339356445",
+            "color": "#689F38"
         }
     ]
 }
