@@ -185,6 +185,13 @@ function attachEventListeners() {
   // Copiar resumen
   document.querySelector(DOM_SELECTORS.COPY_SUMMARY_BTN)?.addEventListener('click', copySummary);
 
+  // Compartir resumen (Nativo)
+  const shareBtn = document.getElementById('share-summary-btn');
+  if (shareBtn && navigator.share) {
+    shareBtn.style.display = 'inline-flex'; // Mostrar solo si es soportado
+    shareBtn.addEventListener('click', shareSummary);
+  }
+
   // Toggle de tema
   document.querySelector(DOM_SELECTORS.THEME_TOGGLE_BTN)?.addEventListener('click', toggleTheme);
 
@@ -380,16 +387,50 @@ function copySummary() {
     });
 }
 
+// ========== Compartir Resumen (Web Share API) ==========
+
+async function shareSummary() {
+  const breakdownItems = document.querySelectorAll('#price-breakdown .breakdown-item');
+  let text = '*Resumen del Plan*\n\n';
+
+  breakdownItems.forEach(item => {
+    const label = item.querySelector('.label').innerText;
+    const value = item.querySelector('.value').innerText;
+    text += `- ${label}: ${value}\n`;
+  });
+
+  const total = document.querySelector(DOM_SELECTORS.TOTAL_PRICE).innerText;
+  text += `\n*Total Mensual: ${total}*`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Cotización de Servicios',
+        text: text,
+      });
+      console.log('Compartido exitosamente');
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Error al compartir:', err);
+        alert('No se pudo compartir el resumen.');
+      }
+    }
+  } else {
+    copySummary();
+  }
+}
+
 // ========== Chart Toggle ==========
 
-function toggleChartView() {
-  chartVisible = !chartVisible;
-  toggleChartVisibility(chartVisible);
-
+async function toggleChartView() {
   const btn = document.getElementById('toggle-chart-btn');
-  btn.textContent = chartVisible ? '📊 Ocultar' : '📊 Gráfico';
 
-  if (chartVisible) {
+  if (!chartVisible) {
+    // Mostrar gráfico
+    chartVisible = true;
+    toggleChartVisibility(true);
+    btn.textContent = '📊 Ocultar';
+
     // Obtener breakdown items actual
     const breakdownItems = [];
     document.querySelectorAll('#price-breakdown .breakdown-item').forEach(item => {
@@ -400,6 +441,23 @@ function toggleChartView() {
         breakdownItems.push({ label, value });
       }
     });
-    updateChart(breakdownItems);
+
+    // Si Chart.js no está cargado, indicarlo visualmente en el botón
+    if (typeof Chart === 'undefined') {
+      const originalText = btn.textContent;
+      btn.textContent = '⏳ Cargando...';
+      btn.disabled = true;
+      await updateChart(breakdownItems); // Esto hará el lazy load internamente
+      btn.textContent = originalText;
+      btn.disabled = false;
+    } else {
+      updateChart(breakdownItems);
+    }
+
+  } else {
+    // Ocultar gráfico
+    chartVisible = false;
+    toggleChartVisibility(false);
+    btn.textContent = '📊 Gráfico';
   }
 }

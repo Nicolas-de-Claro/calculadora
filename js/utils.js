@@ -96,3 +96,24 @@ export function safeJsonParse(jsonString) {
         return { data: null, error: e.message };
     }
 }
+
+/**
+ * Carga un script de forma dinámica
+ * @param {string} src - URL del script
+ * @returns {Promise} - Promesa que se resuelve cuando carga el script
+ */
+export function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        // Si ya existe un script con ese src, resolver inmediatamente
+        if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Error al cargar el script ${src}`));
+        document.head.appendChild(script);
+    });
+}

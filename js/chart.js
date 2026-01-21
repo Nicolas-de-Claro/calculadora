@@ -1,17 +1,36 @@
-/**
- * Módulo de gráfico circular para distribución de costos
- * Usa Chart.js cargado desde CDN
- */
+import { loadScript } from './utils.js';
 
 let chartInstance = null;
+let isChartLoading = false;
 
 /**
  * Actualiza o crea el gráfico de distribución de costos
  * @param {Array} breakdownItems - Items del desglose [{label, value}]
  */
-export function updateChart(breakdownItems) {
+export async function updateChart(breakdownItems) {
     const canvas = document.getElementById('cost-chart');
-    if (!canvas || !window.Chart) return;
+    if (!canvas) return;
+
+    // Lazy load Chart.js
+    if (typeof Chart === 'undefined') {
+        if (isChartLoading) return; // Evitar cargas duplicadas
+
+        try {
+            isChartLoading = true;
+            // Mostrar estado de carga si es visible el contenedor
+            const container = document.getElementById('chart-container');
+            if (container && container.style.display !== 'none') {
+                // Opcional: mostrar loader visual
+            }
+
+            await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js');
+            isChartLoading = false;
+        } catch (error) {
+            console.error('Error cargando Chart.js:', error);
+            isChartLoading = false;
+            return;
+        }
+    }
 
     const ctx = canvas.getContext('2d');
 

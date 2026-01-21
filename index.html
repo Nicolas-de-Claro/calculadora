@@ -14,10 +14,6 @@
   <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-  <!-- Chart.js for pie chart -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <!-- jsPDF for PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -107,6 +103,8 @@
         <!-- Action buttons -->
         <div class="action-buttons">
           <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
+          <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
+            Compartir</button>
           <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
           <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
         </div>

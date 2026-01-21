@@ -3,7 +3,7 @@
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_NAME = 'calculadora-v4';
+const CACHE_NAME = 'calculadora-v5';
 const STATIC_ASSETS = [
     './',
     './index.html',
