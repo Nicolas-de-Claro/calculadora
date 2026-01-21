@@ -2,7 +2,7 @@
   "name": "Calculadora de Precios",
   "short_name": "Calculadora",
   "description": "Calculadora de precios para planes de Internet, TV y líneas móviles",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#F5F5F5",
   "theme_color": "#D32F2F",
@@ -21,6 +21,9 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["utilities", "finance"],
+  "categories": [
+    "utilities",
+    "finance"
+  ],
   "lang": "es-AR"
 }
