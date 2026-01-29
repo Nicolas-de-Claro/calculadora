@@ -184,6 +184,9 @@ function attachEventListeners() {
   // Delegación de eventos para líneas móviles
   document.querySelector(DOM_SELECTORS.PORTABILITY_SECTION)?.addEventListener('change', (event) => {
     if (event.target.matches('.port-request, .data-amount, .porta-type, .extra-pack')) {
+      if (event.target.matches('.port-request')) {
+        updateDataGigasLabels(event.target);
+      }
       calculateTotalPriceDebounced();
     }
   });
@@ -321,10 +324,10 @@ function addPortabilitySection(isInitial = false) {
       <label id="operator-label">Operador</label>
       <select class="port-request" aria-labelledby="operator-label">
         <option value="no">No incluir</option>
+        <option value="convergente">Convergente</option>
         <option value="linea_nueva">Línea Nueva</option>
         <option value="personal">Personal</option>
         <option value="movistar">Movistar / Tuenti</option>
-        <option value="convergente">Convergente</option>
       </select>
     </div>
     <div class="option">
@@ -377,6 +380,28 @@ function updateClaroAbonoSelection() {
   } else {
     abonoSelect.value = '2';
   }
+}
+
+function updateDataGigasLabels(operatorSelect) {
+  const card = operatorSelect.closest('.card');
+  const dataSelect = card?.querySelector('.data-amount');
+  if (!dataSelect) return;
+
+  const isConvergente = operatorSelect.value === 'convergente';
+  const options = dataSelect.querySelectorAll('option');
+
+  options.forEach(option => {
+    const value = option.value;
+    if (value === 'no') return;
+
+    if (isConvergente) {
+      if (!option.text.includes('+ 10 GB de Regalo')) {
+        option.text = `${value} GB + 10 GB de Regalo`;
+      }
+    } else {
+      option.text = `${value} GB`;
+    }
+  });
 }
 
 // ========== Copiar Resumen ==========
