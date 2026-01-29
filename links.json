@@ -33,20 +33,20 @@
             "color": "#9C27B0"
         },
         {
-            "id": "inter-porta",
-            "nombre": "INTER PORTA",
-            "descripcion": "Formulario Inter Portabilidad",
-            "icono": "🔄",
-            "url": "https://docs.google.com/forms/d/e/1FAIpQLSciCmKv7dpINjRMlYQwSvusSQABnSQWemwwxSP1fMbBvO-AHw/viewform",
-            "color": "#1976D2"
-        },
-        {
             "id": "teccom-porta",
             "nombre": "TECCOM PORTA",
             "descripcion": "Formulario Teccom Portabilidad",
             "icono": "📲",
             "url": "https://docs.google.com/forms/d/e/1FAIpQLSdTalYs07vwp1biVl7ASCTraJytRkTKscfz9P8-6vUQZJnycg/viewform?fbzx=7281803629339356445",
             "color": "#689F38"
+        },
+        {
+            "id": "inter-porta",
+            "nombre": "INTER PORTA",
+            "descripcion": "Formulario Inter Portabilidad",
+            "icono": "🔄",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSciCmKv7dpINjRMlYQwSvusSQABnSQWemwwxSP1fMbBvO-AHw/viewform",
+            "color": "#1976D2"
         }
     ],
     "herramientas": [
