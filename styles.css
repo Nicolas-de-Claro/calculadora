@@ -122,24 +122,28 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.option {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.option,
+.payment-option {
+    display: grid;
+    grid-template-columns: 140px 1fr;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.payment-option {
+    margin-top: 0.5rem;
 }
 
 label {
     font-size: 0.9rem;
     color: var(--text-secondary);
-    min-width: 120px;
-    /* Asegurar espacio para el texto */
+    /* min-width removed in favor of grid */
+    line-height: 1.2;
 }
 
 select {
-    flex: 1;
-    /* Ocupar el espacio restante */
+    width: 100%;
     padding: 0.6rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -154,15 +158,8 @@ select {
     background-size: 0.8em;
     cursor: pointer;
     transition: var(--theme-transition);
-}
-
-.payment-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    margin-top: 0.5rem;
-    /* Add some spacing */
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .toggle-switch {
@@ -170,6 +167,8 @@ select {
     display: inline-block;
     width: 50px;
     height: 28px;
+    justify-self: end;
+    /* Align to right in grid */
 }
 
 .toggle-switch input {
