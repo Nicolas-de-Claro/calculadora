@@ -143,8 +143,26 @@ function calculateTotalPrice() {
     breakdownItems.push(claroPayResult.breakdown);
   }
 
-  // Ordenar breakdownItems: positivos primero (costos), negativos al final (descuentos)
-  breakdownItems.sort((a, b) => b.value - a.value);
+  // Ordenar breakdownItems: según prioridad específica y descuentos al final
+  breakdownItems.sort((a, b) => {
+    // Si uno es descuento y el otro no, el descuento va al final
+    if (a.value < 0 && b.value >= 0) return 1;
+    if (a.value >= 0 && b.value < 0) return -1;
+
+    // Si ambos son descuentos, mantener el orden por valor (más negativo al final)
+    if (a.value < 0 && b.value < 0) return b.value - a.value;
+
+    // Si ambos son positivos, aplicar pesos por tipo de servicio
+    const getWeight = (item) => {
+      if (item.label.includes('Internet')) return 1;
+      if (item.label.includes('TV')) return 2;
+      if (item.label.includes('Línea')) return 3;
+      if (item.label.includes('Pack Fútbol')) return 4;
+      return 5;
+    };
+
+    return getWeight(a) - getWeight(b);
+  });
 
   // Actualizar UI
   renderBreakdown(breakdownItems);
