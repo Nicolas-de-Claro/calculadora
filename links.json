@@ -48,5 +48,39 @@
             "url": "https://docs.google.com/forms/d/e/1FAIpQLSdTalYs07vwp1biVl7ASCTraJytRkTKscfz9P8-6vUQZJnycg/viewform?fbzx=7281803629339356445",
             "color": "#689F38"
         }
+    ],
+    "herramientas": [
+        {
+            "id": "consultar-cobertura",
+            "nombre": "Consultar Cobertura",
+            "descripcion": "Verificar cobertura de servicio fijo",
+            "icono": "📍",
+            "url": "https://reingenieria-stl-fija.claro.com.ar/webCoberturaFija/Default.aspx",
+            "color": "#E91E63"
+        },
+        {
+            "id": "consultar-deuda",
+            "nombre": "Consultar Deuda",
+            "descripcion": "Consultar deuda en Claro",
+            "icono": "💳",
+            "url": "https://reingenieria-stl-fija.claro.com.ar/login",
+            "color": "#FF5722"
+        },
+        {
+            "id": "consultar-compania",
+            "nombre": "Consultar Compañía Celular",
+            "descripcion": "Verificar operador de número móvil",
+            "icono": "📱",
+            "url": "https://numeracion.enacom.gob.ar/",
+            "color": "#673AB7"
+        },
+        {
+            "id": "consultar-dni",
+            "nombre": "Consultar DNI",
+            "descripcion": "Verificar datos por DNI en Nosis",
+            "icono": "🪪",
+            "url": "https://www.nosis.com/es",
+            "color": "#009688"
+        }
     ]
 }

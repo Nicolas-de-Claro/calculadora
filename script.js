@@ -66,6 +66,9 @@ function initializeApp() {
   // Cargar botones de carga de cliente
   loadCargaButtons();
 
+  // Cargar botones de herramientas
+  loadHerramientasButtons();
+
   // Adjuntar event listeners
   attachEventListeners();
 
@@ -243,19 +246,24 @@ function initTabs() {
 
 // ========== Carga de Botones Dinámicos ==========
 
-async function loadCargaButtons() {
+/**
+ * Carga botones de links dinámicamente desde links.json
+ * @param {string} containerId - ID del contenedor donde insertar los botones
+ * @param {string} dataKey - Clave del array en links.json
+ */
+async function loadLinkButtons(containerId, dataKey) {
   try {
     const response = await fetch('links.json');
     if (!response.ok) throw new Error('No se pudo cargar links.json');
 
     const data = await response.json();
-    const container = document.getElementById('carga-buttons');
+    const container = document.getElementById(containerId);
 
-    if (!container || !data.cargaCliente) return;
+    if (!container || !data[dataKey]) return;
 
     container.innerHTML = '';
 
-    data.cargaCliente.forEach(item => {
+    data[dataKey].forEach(item => {
       const link = document.createElement('a');
       link.href = item.url;
       link.target = '_blank';
@@ -277,8 +285,16 @@ async function loadCargaButtons() {
       container.appendChild(link);
     });
   } catch (error) {
-    console.error('Error cargando botones de carga:', error);
+    console.error(`Error cargando botones de ${dataKey}:`, error);
   }
+}
+
+async function loadCargaButtons() {
+  await loadLinkButtons('carga-buttons', 'cargaCliente');
+}
+
+async function loadHerramientasButtons() {
+  await loadLinkButtons('herramientas-buttons', 'herramientas');
 }
 
 
