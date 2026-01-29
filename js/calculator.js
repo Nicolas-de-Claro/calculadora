@@ -70,7 +70,11 @@ export function calculateLineCost(prices, portaType, operator, dataAmount, extra
     // Costo base de la línea
     if (prices.PORTA[portaType]?.[operator]?.[dataAmount]) {
         price += prices.PORTA[portaType][operator][dataAmount];
-        label += ` (${dataAmount}GB)`;
+        if (operator === 'convergente') {
+            label += ` (${dataAmount} GB + 10 GB de Regalo)`;
+        } else {
+            label += ` (${dataAmount}GB)`;
+        }
     }
 
     // Pack adicional
