@@ -140,6 +140,9 @@ function calculateTotalPrice() {
     breakdownItems.push(claroPayResult.breakdown);
   }
 
+  // Ordenar breakdownItems: positivos primero (costos), negativos al final (descuentos)
+  breakdownItems.sort((a, b) => b.value - a.value);
+
   // Actualizar UI
   renderBreakdown(breakdownItems);
   updateTotalPrice(subtotal);
@@ -304,8 +307,7 @@ function addPortabilitySection(isInitial = false) {
         <option value="no">No incluir</option>
         <option value="linea_nueva">Línea Nueva</option>
         <option value="personal">Personal</option>
-        <option value="movistar">Movistar</option>
-        <option value="tuenti">Tuenti</option>
+        <option value="movistar">Movistar / Tuenti</option>
         <option value="convergente">Convergente</option>
       </select>
     </div>

@@ -124,18 +124,23 @@ body {
 
 .option {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
 }
 
 label {
     font-size: 0.9rem;
     color: var(--text-secondary);
+    min-width: 120px;
+    /* Asegurar espacio para el texto */
 }
 
 select {
-    width: 100%;
-    padding: 0.8rem;
+    flex: 1;
+    /* Ocupar el espacio restante */
+    padding: 0.6rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background-color: var(--input-background);
@@ -156,6 +161,8 @@ select {
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    margin-top: 0.5rem;
+    /* Add some spacing */
 }
 
 .toggle-switch {
