@@ -54,6 +54,10 @@
     gap: 1.5rem;
 }
 
+#portability-section:empty {
+    display: none;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
