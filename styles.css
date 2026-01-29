@@ -739,7 +739,7 @@ button.success {
 .tab-content {
     display: none;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     animation: fadeIn 0.3s ease-out;
 }
 
