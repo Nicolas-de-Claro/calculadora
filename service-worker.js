@@ -1,10 +1,10 @@
 /**
- * Service Worker para Calculadora de Precios
+ * Service Worker para Claro Asesor
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_VERSION = '2026-01-30';
-const CACHE_NAME = `calculadora-${CACHE_VERSION}`;
+const CACHE_VERSION = '2026-01-30-b';
+const CACHE_NAME = `claro-asesor-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
     './',
     './index.html',

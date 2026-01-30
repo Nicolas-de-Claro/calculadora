@@ -1,5 +1,5 @@
 /**
- * Calculadora de Precios - Módulo Principal
+ * Claro Asesor - Módulo Principal
  * Refactorizado con ES6 modules, debounce y manejo de errores mejorado
  */
 
@@ -257,9 +257,11 @@ function initTabs() {
 
       // Actualizar título de la página
       if (targetTab === 'calculadora') {
-        pageTitle.textContent = 'Calculadora de Precios';
+        pageTitle.textContent = 'Cotizador';
       } else if (targetTab === 'carga') {
         pageTitle.textContent = 'Carga de Cliente';
+      } else if (targetTab === 'herramientas') {
+        pageTitle.textContent = 'Herramientas';
       }
     });
   });

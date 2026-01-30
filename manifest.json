@@ -1,7 +1,7 @@
 {
-  "name": "Calculadora de Precios",
-  "short_name": "Calculadora",
-  "description": "Calculadora de precios para planes de Internet, TV y líneas móviles",
+  "name": "Claro Asesor",
+  "short_name": "Claro Asesor",
+  "description": "Herramienta integral para asesores: cotizador, carga de clientes y consultas",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#F5F5F5",
