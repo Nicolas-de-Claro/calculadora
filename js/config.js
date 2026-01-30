@@ -5,6 +5,7 @@
 import { DOM_SELECTORS, ERROR_MESSAGES } from './constants.js';
 import { validatePricesStructure, safeJsonParse } from './utils.js';
 import { showError, hideError } from './ui.js';
+import { showInfo } from './toast.js';
 
 /**
  * Abre el modal de configuración
@@ -128,7 +129,7 @@ export function initConfigModal(prices, onPricesUpdate) {
             if (onPricesUpdate) {
                 onPricesUpdate(newPrices);
             }
-            alert('Precios actualizados temporalmente.\nAl recargar la página se restaurarán los precios originales.');
+            showInfo('Precios actualizados (temporalmente)');
         });
     });
 

@@ -6,6 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Calculadora de precios para planes de Internet, TV y líneas móviles" />
   <meta name="theme-color" content="#D32F2F" />
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+                 script-src 'self' https://cdn.jsdelivr.net; 
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                 font-src https://fonts.gstatic.com; 
+                 img-src 'self' data: blob:; 
+                 connect-src 'self';">
+  <!-- Preload critical resources -->
+  <link rel="preload" href="prices.json" as="fetch" crossorigin="anonymous">
+  <link rel="preload" href="links.json" as="fetch" crossorigin="anonymous">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Calculadora de Precios</title>
@@ -172,16 +182,7 @@
   </div>
 
   <script type="module" src="script.js"></script>
-  <script>
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(reg => console.log('SW registrado:', reg.scope))
-          .catch(err => console.log('SW error:', err));
-      });
-    }
-  </script>
+  <script src="js/sw-register.js"></script>
 </body>
 
 </html>

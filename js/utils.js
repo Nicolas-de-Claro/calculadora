@@ -80,6 +80,30 @@ export function validatePricesStructure(prices) {
         };
     }
 
+    // Validar que todos los precios sean números positivos
+    const validateNumericValues = (obj, path = '') => {
+        for (const [key, value] of Object.entries(obj)) {
+            const currentPath = path ? `${path}.${key}` : key;
+            if (typeof value === 'object' && value !== null) {
+                const result = validateNumericValues(value, currentPath);
+                if (!result.isValid) return result;
+            } else if (typeof value === 'number') {
+                if (value < 0) {
+                    return {
+                        isValid: false,
+                        error: `El valor en "${currentPath}" no puede ser negativo.`
+                    };
+                }
+            }
+        }
+        return { isValid: true, error: null };
+    };
+
+    const numericValidation = validateNumericValues(prices);
+    if (!numericValidation.isValid) {
+        return numericValidation;
+    }
+
     return { isValid: true, error: null };
 }
 

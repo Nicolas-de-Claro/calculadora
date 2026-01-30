@@ -292,16 +292,34 @@ async function loadLinkButtons(containerId, dataKey) {
       link.className = 'carga-link-btn';
       link.id = item.id;
 
-      link.innerHTML = `
-        <span class="carga-link-icon" style="background-color: ${item.color}20; color: ${item.color}">
-          ${item.icono}
-        </span>
-        <div class="carga-link-content">
-          <span class="carga-link-title">${item.nombre}</span>
-          <span class="carga-link-desc">${item.descripcion}</span>
-        </div>
-        <span class="carga-link-arrow">→</span>
-      `;
+      // Create elements safely to prevent XSS
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'carga-link-icon';
+      iconSpan.style.backgroundColor = `${item.color}20`;
+      iconSpan.style.color = item.color;
+      iconSpan.textContent = item.icono;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'carga-link-content';
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'carga-link-title';
+      titleSpan.textContent = item.nombre;
+
+      const descSpan = document.createElement('span');
+      descSpan.className = 'carga-link-desc';
+      descSpan.textContent = item.descripcion;
+
+      contentDiv.appendChild(titleSpan);
+      contentDiv.appendChild(descSpan);
+
+      const arrowSpan = document.createElement('span');
+      arrowSpan.className = 'carga-link-arrow';
+      arrowSpan.textContent = '→';
+
+      link.appendChild(iconSpan);
+      link.appendChild(contentDiv);
+      link.appendChild(arrowSpan);
 
       container.appendChild(link);
     });
@@ -326,21 +344,24 @@ function addPortabilitySection(isInitial = false) {
   const card = document.createElement('div');
   card.className = 'card portability fade-in';
 
+  // Generate unique ID suffix for ARIA labels
+  const uniqueId = Date.now() + Math.random().toString(36).substr(2, 9);
+
   card.innerHTML = `
     <div class="card-title-container">
       <h2 class="card-title">Línea Móvil</h2>
       ${!isInitial ? '<button class="remove-line-btn" aria-label="Quitar línea móvil">Quitar</button>' : ''}
     </div>
     <div class="option">
-      <label id="porta-type-label">Tipo de Línea</label>
-      <select class="porta-type" aria-labelledby="porta-type-label">
+      <label id="porta-type-label-${uniqueId}">Tipo de Línea</label>
+      <select class="porta-type" aria-labelledby="porta-type-label-${uniqueId}">
         <option value="CONSUMIDOR_FINAL">Consumidor Final</option>
         <option value="CORPORATIVO">Corporativo</option>
       </select>
     </div>
     <div class="option">
-      <label id="operator-label">Operador</label>
-      <select class="port-request" aria-labelledby="operator-label">
+      <label id="operator-label-${uniqueId}">Operador</label>
+      <select class="port-request" aria-labelledby="operator-label-${uniqueId}">
         <option value="no">No incluir</option>
         <option value="convergente">Convergente</option>
         <option value="linea_nueva">Línea Nueva</option>
@@ -349,8 +370,8 @@ function addPortabilitySection(isInitial = false) {
       </select>
     </div>
     <div class="option">
-      <label id="data-label">Gigas</label>
-      <select class="data-amount" aria-labelledby="data-label">
+      <label id="data-label-${uniqueId}">Gigas</label>
+      <select class="data-amount" aria-labelledby="data-label-${uniqueId}">
         <option value="no">No incluir</option>
         <option value="2">2 GB</option>
         <option value="4">4 GB</option>
@@ -361,8 +382,8 @@ function addPortabilitySection(isInitial = false) {
       </select>
     </div>
     <div class="option">
-      <label id="pack-label">Pack Adicional</label>
-      <select class="extra-pack" aria-labelledby="pack-label">
+      <label id="pack-label-${uniqueId}">Pack Adicional</label>
+      <select class="extra-pack" aria-labelledby="pack-label-${uniqueId}">
         <option value="no">Ninguno</option>
         <option value="PACK_10_GB">Pack 10 GB</option>
         <option value="PACK_15_GB">Pack 15 GB</option>

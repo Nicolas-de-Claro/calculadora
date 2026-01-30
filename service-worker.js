@@ -3,7 +3,8 @@
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_NAME = 'calculadora-v5';
+const CACHE_VERSION = '2026-01-30';
+const CACHE_NAME = `calculadora-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -17,6 +18,10 @@ const STATIC_ASSETS = [
     './js/calculator.js',
     './js/ui.js',
     './js/config.js',
+    './js/pdf-export.js',
+    './js/chart.js',
+    './js/toast.js',
+    './js/sw-register.js',
     './manifest.json',
     './icons/icon-192x192.png',
     './icons/icon-512x512.png'
