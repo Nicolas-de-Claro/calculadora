@@ -51,9 +51,7 @@ export async function exportToPdf() {
     const fecha = new Date().toLocaleDateString('es-AR', {
         day: '2-digit',
         month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+        year: 'numeric'
     });
     doc.text(`Generado: ${fecha}`, pageWidth / 2, 28, { align: 'center' });
 

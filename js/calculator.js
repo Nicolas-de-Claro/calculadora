@@ -79,8 +79,9 @@ export function calculateLineCost(prices, portaType, operator, dataAmount, extra
 
     // Pack adicional
     if (prices.ADICIONALES?.[extraPack] && extraPack !== 'no') {
+        const packName = extraPack.replace(/_/g, ' ').replace('PACK', 'Pack');
         price += prices.ADICIONALES[extraPack];
-        label += ' + Pack';
+        label += ` + ${packName}`;
     }
 
     return { price, breakdown: { label, value: price } };
