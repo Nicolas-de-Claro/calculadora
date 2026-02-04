@@ -992,3 +992,15 @@ button.success {
         flex-direction: column;
     }
 }
+
+/* Fix for buttons inside internal forms on light background */
+.form-actions .copy-btn {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    box-shadow: var(--shadow);
+}
+
+.form-actions .copy-btn:hover {
+    background-color: var(--primary-hover);
+}
