@@ -55,6 +55,16 @@
             "icono": "🔧",
             "url": "https://docs.google.com/forms/d/1J-ZjlpN4TG2NgqwnXPNUDzhWTyiXsa1G7bg73lcyUaE/viewform?edit_requested=true",
             "color": "#0288D1"
+        },
+        {
+            "id": "teccom-acometimientos",
+            "nombre": "TECCOM ACOMETIMIENTOS",
+            "descripcion": "Formulario Interno Teccom",
+            "icono": "📋",
+            "url": "#",
+            "action": "internal-form",
+            "targetId": "teccom-form",
+            "color": "#FF9800"
         }
     ],
     "herramientas": [

@@ -3,7 +3,7 @@
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_VERSION = '2026-01-30-b';
+const CACHE_VERSION = '2026-02-04-a';
 const CACHE_NAME = `claro-asesor-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
     './',

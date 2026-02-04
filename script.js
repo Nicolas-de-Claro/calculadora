@@ -289,11 +289,21 @@ async function loadLinkButtons(containerId, dataKey) {
 
     data[dataKey].forEach(item => {
       const link = document.createElement('a');
-      link.href = item.url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
       link.className = 'carga-link-btn';
       link.id = item.id;
+
+      // Handle internal forms
+      if (item.action === 'internal-form' && item.targetId) {
+        link.href = '#';
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          showInternalForm(item.targetId);
+        });
+      } else {
+        link.href = item.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }
 
       // Create elements safely to prevent XSS
       const iconSpan = document.createElement('span');
@@ -326,6 +336,10 @@ async function loadLinkButtons(containerId, dataKey) {
 
       container.appendChild(link);
     });
+
+    // Initialize logic for Teccom Form
+    initTeccomForm();
+
   } catch (error) {
     console.error(`Error cargando botones de ${dataKey}:`, error);
   }
@@ -444,6 +458,86 @@ function updateDataGigasLabels(operatorSelect) {
       option.text = `${value} GB`;
     }
   });
+}
+
+// ========== Formulario Interno (Teccom) ==========
+
+function initTeccomForm() {
+  const form = document.getElementById('teccom-form');
+  const closeBtn = document.getElementById('close-teccom-form');
+  const copyBtn = document.getElementById('copy-teccom-btn');
+  const shareBtn = document.getElementById('share-teccom-btn');
+
+  if (!form) return;
+
+  closeBtn?.addEventListener('click', () => hideInternalForm('teccom-form'));
+  copyBtn?.addEventListener('click', copyTeccomData);
+  shareBtn?.addEventListener('click', shareTeccomData);
+}
+
+function showInternalForm(formId) {
+  const buttonsContainer = document.getElementById('carga-buttons');
+  const form = document.getElementById(formId);
+
+  if (buttonsContainer && form) {
+    buttonsContainer.style.display = 'none';
+    fadeIn(form);
+  }
+}
+
+function hideInternalForm(formId) {
+  const buttonsContainer = document.getElementById('carga-buttons');
+  const form = document.getElementById(formId);
+
+  if (buttonsContainer && form) {
+    form.style.display = 'none';
+    fadeIn(buttonsContainer);
+  }
+}
+
+function getTeccomFormData() {
+  const fields = {
+    admin: document.getElementById('teccom-admin').value,
+    contact: document.getElementById('teccom-contact').value,
+    time: document.getElementById('teccom-time').value,
+    address: document.getElementById('teccom-address').value,
+    floors: document.getElementById('teccom-floors').value,
+    apts: document.getElementById('teccom-apts').value,
+    type: document.getElementById('teccom-type').value
+  };
+
+  return `*SOLICITUD TECCOM ACOMETIMIENTO*
+
+*Administrador/Encargado:* ${fields.admin || '-'}
+*Contacto:* ${fields.contact || '-'}
+*Franja Horaria:* ${fields.time || '-'}
+*Dirección:* ${fields.address || '-'}
+*Pisos:* ${fields.floors || '-'}
+*Dptos por Piso:* ${fields.apts || '-'}
+*Tipo de Pedido:* ${fields.type}`;
+}
+
+function copyTeccomData() {
+  const text = getTeccomFormData();
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      const btn = document.getElementById('copy-teccom-btn');
+      showButtonFeedback(btn, '¡Copiado!', '📋 Copiar Datos');
+    })
+    .catch(() => showError('Error al copiar'));
+}
+
+async function shareTeccomData() {
+  const text = getTeccomFormData();
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Solicitud Teccom', text: text });
+    } catch (err) {
+      if (err.name !== 'AbortError') showError('Error al compartir');
+    }
+  } else {
+    copyTeccomData();
+  }
 }
 
 // ========== Copiar Resumen ==========

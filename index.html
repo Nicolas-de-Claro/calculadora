@@ -140,6 +140,61 @@
         <div id="carga-buttons" class="carga-buttons">
           <!-- Los botones se cargan dinámicamente desde links.json -->
         </div>
+
+        <!-- Formulario Interno: TECCOM ACOMETIMIENTOS -->
+        <div id="teccom-form" class="internal-form" style="display: none;">
+          <header class="form-header">
+            <button id="close-teccom-form" class="back-btn" aria-label="Volver">← Volver</button>
+            <h3 class="form-title">TECCOM ACOMETIMIENTOS</h3>
+          </header>
+
+          <div class="form-content">
+            <div class="input-group">
+              <label for="teccom-admin">Nombre y Apellido Administrador/Encargado</label>
+              <input type="text" id="teccom-admin" placeholder="Ej: Juan Pérez" />
+            </div>
+
+            <div class="input-group">
+              <label for="teccom-contact">Número de Contacto</label>
+              <input type="tel" id="teccom-contact" placeholder="Ej: 381..." />
+            </div>
+
+            <div class="input-group">
+              <label for="teccom-time">Franja Horaria</label>
+              <input type="text" id="teccom-time" placeholder="Ej: 09:00 - 13:00" />
+            </div>
+
+            <div class="input-group">
+              <label for="teccom-address">Dirección Exacta</label>
+              <input type="text" id="teccom-address" placeholder="Calle, Altura, Piso, Dpto" />
+            </div>
+
+            <div class="row-2-col">
+              <div class="input-group">
+                <label for="teccom-floors">Cantidad de Pisos</label>
+                <input type="number" id="teccom-floors" min="0" />
+              </div>
+              <div class="input-group">
+                <label for="teccom-apts">Dptos por Piso</label>
+                <input type="number" id="teccom-apts" min="0" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="teccom-type">Tipo de Pedido</label>
+              <select id="teccom-type">
+                <option value="NUEVA ACOMETIDA">Nueva Acometida</option>
+                <option value="AMPLIACION">Ampliación</option>
+                <option value="PROYECTOS ESPECIALES">Proyectos Especiales</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button id="copy-teccom-btn" class="copy-btn">📋 Copiar Datos</button>
+              <button id="share-teccom-btn" class="copy-btn">🔗 Compartir</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
