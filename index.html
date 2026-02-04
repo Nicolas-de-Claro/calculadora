@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#D32F2F" />
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
-                 script-src 'self' https://cdn.jsdelivr.net; 
+                 script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; 
                  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
                  font-src https://fonts.gstatic.com; 
                  img-src 'self' data: blob:; 
@@ -38,6 +38,10 @@
 
     <!-- Tab: Calculadora -->
     <main id="tab-calculadora" class="tab-content active" role="tabpanel">
+      <div class="carga-section">
+        <h2 class="section-title">Cotizador</h2>
+        <p class="section-subtitle">Calcula el presupuesto personalizado para tu cliente</p>
+      </div>
       <!-- Card de Internet y TV -->
       <div class="card">
         <h2 class="card-title">Internet y TV</h2>

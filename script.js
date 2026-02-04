@@ -27,6 +27,7 @@ import {
 import { initConfigModal } from './js/config.js';
 import { exportToPdf } from './js/pdf-export.js';
 import { updateChart, toggleChartVisibility } from './js/chart.js';
+import { showError, showSuccess } from './js/toast.js';
 
 // Estado global de la aplicación
 let prices = {};
@@ -466,8 +467,7 @@ function copySummary() {
       showButtonFeedback(btn, '¡Copiado!', '📋 Copiar');
     })
     .catch(err => {
-      console.error('Error al copiar:', err);
-      alert(ERROR_MESSAGES.COPY_ERROR);
+      showError(ERROR_MESSAGES.COPY_ERROR);
     });
 }
 
@@ -495,8 +495,7 @@ async function shareSummary() {
       console.log('Compartido exitosamente');
     } catch (err) {
       if (err.name !== 'AbortError') {
-        console.error('Error al compartir:', err);
-        alert('No se pudo compartir el resumen.');
+        showError('No se pudo compartir el resumen.');
       }
     }
   } else {

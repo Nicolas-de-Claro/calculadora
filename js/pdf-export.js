@@ -1,4 +1,5 @@
 import { formatCurrency, loadScript } from './utils.js';
+import { showError } from './toast.js';
 
 /**
  * Genera y descarga un PDF con la cotización actual
@@ -18,7 +19,7 @@ export async function exportToPdf() {
             btn.disabled = false;
         } catch (error) {
             console.error('Error cargando jsPDF:', error);
-            alert('No se pudo cargar la librería de PDF. Verifique su conexión.');
+            showError('No se pudo cargar la librería de PDF. Verifique su conexión.');
             document.getElementById('export-pdf-btn').textContent = '📄 PDF';
             document.getElementById('export-pdf-btn').disabled = false;
             return;
