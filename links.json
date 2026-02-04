@@ -47,6 +47,14 @@
             "icono": "🔄",
             "url": "https://docs.google.com/forms/d/e/1FAIpQLSciCmKv7dpINjRMlYQwSvusSQABnSQWemwwxSP1fMbBvO-AHw/viewform",
             "color": "#1976D2"
+        },
+        {
+            "id": "inter-acometimientos",
+            "nombre": "INTER ACOMENTIMIENTOS",
+            "descripcion": "Formulario Inter Acometimientos",
+            "icono": "🔧",
+            "url": "https://docs.google.com/forms/d/1J-ZjlpN4TG2NgqwnXPNUDzhWTyiXsa1G7bg73lcyUaE/viewform?edit_requested=true",
+            "color": "#0288D1"
         }
     ],
     "herramientas": [
