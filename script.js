@@ -287,7 +287,17 @@ async function loadLinkButtons(containerId, dataKey) {
 
     container.innerHTML = '';
 
+    let lastCategory = null;
+
     data[dataKey].forEach(item => {
+      // Insert separator if category changes
+      if (item.category && lastCategory && item.category !== lastCategory) {
+        const separator = document.createElement('div');
+        separator.className = 'link-category-separator';
+        container.appendChild(separator);
+      }
+      lastCategory = item.category;
+
       const link = document.createElement('a');
       link.className = 'carga-link-btn';
       link.id = item.id;

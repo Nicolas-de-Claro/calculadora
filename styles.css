@@ -854,6 +854,17 @@ button.success {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
+
+    .link-category-separator {
+        grid-column: 1 / -1;
+    }
+}
+
+.link-category-separator {
+    width: 100%;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 0.5rem 0;
 }
 
 /* ========== Toast Notifications ========== */
