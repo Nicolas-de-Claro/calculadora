@@ -41,91 +41,92 @@
       <div class="carga-section">
         <h2 class="section-title">Cotizador</h2>
         <p class="section-subtitle">Calcula el presupuesto personalizado para tu cliente</p>
-      </div>
-      <!-- Card de Internet y TV -->
-      <div class="card">
-        <h2 class="card-title">Internet y TV</h2>
-        <div class="option">
-          <label for="baf-type">Tipo de Plan</label>
-          <select id="baf-type">
-            <option value="RESIDENCIAL">BAF Residencial</option>
-            <option value="IP_DINAMICA">BAF IP Dinámica</option>
-            <option value="IP_FIJA">BAF IP Fija</option>
-          </select>
-        </div>
-        <div class="option">
-          <label for="internet-speed">Velocidad de Internet</label>
-          <select id="internet-speed">
-            <option value="no">No incluir</option>
-            <option value="100">100 MB</option>
-            <option value="300">300 MB</option>
-            <option value="600">600 MB</option>
-          </select>
-        </div>
-        <div class="option">
-          <label for="add-tv">Servicio de TV</label>
-          <select id="add-tv">
-            <option value="no">No incluir</option>
-            <option value="1">1 Deco</option>
-            <option value="2">2 Decos</option>
-            <option value="3">3 Decos</option>
-          </select>
-        </div>
-      </div>
 
-      <!-- Sección de Portabilidad -->
-      <div id="portability-section"></div>
-
-      <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
-
-      <!-- Opciones de Pago -->
-      <div class="card">
-        <h2 class="card-title">Beneficios</h2>
-        <div class="option">
-          <label for="has-claro-abono">Descuento Abono Claro</label>
-          <select id="has-claro-abono">
-            <option value="no">No tiene</option>
-            <option value="1">1 Línea</option>
-            <option value="2">2 o más</option>
-          </select>
-        </div>
-        <div class="payment-option">
-          <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="pack-futbol-checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="payment-option">
-          <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="claro-pay-checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Card de Total -->
-      <div class="total-card">
-        <div id="price-breakdown"></div>
-        <hr class="total-separator" style="display: none;" />
-        <div class="total-final">
-          <h2>Total Mensual</h2>
-          <p id="total-price">$0.00</p>
+        <!-- Card de Internet y TV -->
+        <div class="card">
+          <h2 class="card-title">Internet y TV</h2>
+          <div class="option">
+            <label for="baf-type">Tipo de Plan</label>
+            <select id="baf-type">
+              <option value="RESIDENCIAL">BAF Residencial</option>
+              <option value="IP_DINAMICA">BAF IP Dinámica</option>
+              <option value="IP_FIJA">BAF IP Fija</option>
+            </select>
+          </div>
+          <div class="option">
+            <label for="internet-speed">Velocidad de Internet</label>
+            <select id="internet-speed">
+              <option value="no">No incluir</option>
+              <option value="100">100 MB</option>
+              <option value="300">300 MB</option>
+              <option value="600">600 MB</option>
+            </select>
+          </div>
+          <div class="option">
+            <label for="add-tv">Servicio de TV</label>
+            <select id="add-tv">
+              <option value="no">No incluir</option>
+              <option value="1">1 Deco</option>
+              <option value="2">2 Decos</option>
+              <option value="3">3 Decos</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Action buttons -->
-        <div class="action-buttons">
-          <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
-          <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
-            Compartir</button>
-          <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
-          <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
+        <!-- Sección de Portabilidad -->
+        <div id="portability-section"></div>
+
+        <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
+
+        <!-- Opciones de Pago -->
+        <div class="card">
+          <h2 class="card-title">Beneficios</h2>
+          <div class="option">
+            <label for="has-claro-abono">Descuento Abono Claro</label>
+            <select id="has-claro-abono">
+              <option value="no">No tiene</option>
+              <option value="1">1 Línea</option>
+              <option value="2">2 o más</option>
+            </select>
+          </div>
+          <div class="payment-option">
+            <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="pack-futbol-checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="payment-option">
+            <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="claro-pay-checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
 
-        <!-- Chart container (hidden by default) -->
-        <div id="chart-container" class="chart-container" style="display: none;">
-          <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
+        <!-- Card de Total -->
+        <div class="total-card">
+          <div id="price-breakdown"></div>
+          <hr class="total-separator" style="display: none;" />
+          <div class="total-final">
+            <h2>Total Mensual</h2>
+            <p id="total-price">$0.00</p>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="action-buttons">
+            <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
+            <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
+              Compartir</button>
+            <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
+            <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
+          </div>
+
+          <!-- Chart container (hidden by default) -->
+          <div id="chart-container" class="chart-container" style="display: none;">
+            <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
+          </div>
         </div>
       </div>
     </main>
