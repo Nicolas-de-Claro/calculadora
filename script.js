@@ -492,6 +492,7 @@ function showInternalForm(formId) {
   if (buttonsContainer && form) {
     buttonsContainer.style.display = 'none';
     fadeIn(form);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
@@ -516,7 +517,7 @@ function getTeccomFormData() {
     type: document.getElementById('teccom-type').value
   };
 
-  return `*SOLICITUD TECCOM ACOMETIMIENTO*
+  return `*SOLICITUD ACOMETIMIENTO*
 
 *Administrador/Encargado:* ${fields.admin || '-'}
 *Contacto:* ${fields.contact || '-'}
