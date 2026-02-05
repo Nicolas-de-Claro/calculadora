@@ -9,7 +9,7 @@ import { STORAGE_KEYS, THEMES } from './constants.js';
  * @returns {Promise<Object>} - Promesa con los precios
  */
 export async function loadPricesFromFile() {
-    const response = await fetch('prices.json');
+    const response = await fetch(`prices.json?t=${new Date().getTime()}`);
     if (!response.ok) {
         throw new Error(`Error HTTP: ${response.status}`);
     }
