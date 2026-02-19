@@ -108,5 +108,70 @@
             "url": "https://www.nosis.com/es",
             "color": "#009688"
         }
+    ],
+    "crm": [
+        {
+            "id": "crm-panel-general",
+            "nombre": "PANEL GENERAL 3.0",
+            "descripcion": "Panel general de gestión",
+            "icono": "📊",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=1336951876#gid=1336951876",
+            "color": "#1565C0",
+            "category": "PANEL"
+        },
+        {
+            "id": "crm-inter-baf",
+            "nombre": "INTER BAF",
+            "descripcion": "Seguimiento Inter BAF",
+            "icono": "🌐",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=2025690011#gid=2025690011",
+            "color": "#4285F4",
+            "category": "BAF"
+        },
+        {
+            "id": "crm-teccom-baf",
+            "nombre": "TECCOM BAF",
+            "descripcion": "Seguimiento Teccom BAF",
+            "icono": "📡",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=1097698656#gid=1097698656",
+            "color": "#34A853",
+            "category": "BAF"
+        },
+        {
+            "id": "crm-movilnoa-baf",
+            "nombre": "MOVILNOA BAF",
+            "descripcion": "Seguimiento Movilnoa BAF",
+            "icono": "📱",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=988702011#gid=988702011",
+            "color": "#9C27B0",
+            "category": "BAF"
+        },
+        {
+            "id": "crm-teccom-porta",
+            "nombre": "TECCOM PORTA",
+            "descripcion": "Seguimiento Teccom Portabilidad",
+            "icono": "📲",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=985560524#gid=985560524",
+            "color": "#689F38",
+            "category": "PORTA"
+        },
+        {
+            "id": "crm-inter-porta",
+            "nombre": "INTER PORTA",
+            "descripcion": "Seguimiento Inter Portabilidad",
+            "icono": "🔄",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=534538575#gid=534538575",
+            "color": "#1976D2",
+            "category": "PORTA"
+        },
+        {
+            "id": "crm-comisiones",
+            "nombre": "COMISIONES",
+            "descripcion": "Seguimiento de comisiones",
+            "icono": "💰",
+            "url": "https://docs.google.com/spreadsheets/d/1Ws-xfX6hVPvajF15pWMcFFNcmqdfO3YIZzV23KkThck/edit?gid=945472876#gid=945472876",
+            "color": "#FF9800",
+            "category": "COMISIONES"
+        }
     ]
 }

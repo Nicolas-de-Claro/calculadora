@@ -70,6 +70,9 @@ function initializeApp() {
   // Cargar botones de herramientas
   loadHerramientasButtons();
 
+  // Cargar botones de CRM
+  loadCrmButtons();
+
   // Adjuntar event listeners
   attachEventListeners();
 
@@ -263,6 +266,8 @@ function initTabs() {
         pageTitle.textContent = 'Carga de Cliente';
       } else if (targetTab === 'herramientas') {
         pageTitle.textContent = 'Herramientas';
+      } else if (targetTab === 'crm') {
+        pageTitle.textContent = 'CRM';
       }
     });
   });
@@ -361,6 +366,10 @@ async function loadCargaButtons() {
 
 async function loadHerramientasButtons() {
   await loadLinkButtons('herramientas-buttons', 'herramientas');
+}
+
+async function loadCrmButtons() {
+  await loadLinkButtons('crm-buttons', 'crm');
 }
 
 

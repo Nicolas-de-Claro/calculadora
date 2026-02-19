@@ -708,7 +708,7 @@ button.success {
     border-radius: 8px;
     background-color: transparent;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
