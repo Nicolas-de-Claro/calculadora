@@ -3,7 +3,7 @@
  * Implementa cache-first strategy para funcionalidad offline
  */
 
-const CACHE_VERSION = '2026-02-04-a';
+const CACHE_VERSION = '2026-03-03-a';
 const CACHE_NAME = `claro-asesor-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
     './',
@@ -21,7 +21,13 @@ const STATIC_ASSETS = [
     './js/pdf-export.js',
     './js/chart.js',
     './js/toast.js',
+    './js/dashboard.js',
     './js/sw-register.js',
+    './lib/leaflet/leaflet.css',
+    './lib/leaflet/leaflet.js',
+    './lib/leaflet/images/marker-icon.png',
+    './lib/leaflet/images/marker-icon-2x.png',
+    './lib/leaflet/images/marker-shadow.png',
     './manifest.json',
     './icons/icon-192x192.png',
     './icons/icon-512x512.png'
