@@ -252,7 +252,10 @@
                   </button>
                 </div>
               </div>
-              <div id="db-mapa-container"></div>
+              <div class="db-mapa-wrapper">
+                <button id="db-btn-fullscreen" class="db-fullscreen-btn" onclick="dbToggleFullScreen()" title="Pantalla Completa">⛶</button>
+                <div id="db-mapa-container"></div>
+              </div>
 
               <!-- Cercanas -->
               <div id="db-cercanas-container" class="db-hidden">
@@ -509,15 +512,51 @@
       document.querySelector('#db-mapa-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
+    let dbLightTileLocal = null;
+    let dbDarkTileLocal = null;
+    let dbCurrentTile = null;
+
     // ── INICIALIZAR MAPA ──
     function dbInitMap() {
       if (dbMap) return;
       dbMap = L.map('db-mapa-container').setView([-26.82414, -65.2226], 12);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      
+      dbLightTileLocal = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
         subdomains: 'abcd', maxZoom: 20
-      }).addTo(dbMap);
+      });
+      dbDarkTileLocal = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd', maxZoom: 20
+      });
+
+      dbCurrentTile = theme === 'dark' ? dbDarkTileLocal : dbLightTileLocal;
+      dbCurrentTile.addTo(dbMap);
+      
       dbMarkersLayer = L.layerGroup().addTo(dbMap);
+    }
+
+    // ── TOGGLE PANTALLA COMPLETA ──
+    function dbToggleFullScreen() {
+      const wrapper = document.querySelector('.db-mapa-wrapper');
+      const btn = document.getElementById('db-btn-fullscreen');
+      wrapper.classList.toggle('db-map-fullscreen');
+      
+      if (wrapper.classList.contains('db-map-fullscreen')) {
+        btn.textContent = '❌';
+        btn.title = 'Salir de Pantalla Completa';
+        document.body.style.overflow = 'hidden'; // Evitar scroll principal
+      } else {
+        btn.textContent = '⛶';
+        btn.title = 'Pantalla Completa';
+        document.body.style.overflow = '';
+      }
+      
+      if (dbMap) {
+        setTimeout(() => dbMap.invalidateSize(), 300);
+      }
     }
 
     // ── DROP ZONE ──
@@ -844,6 +883,26 @@
         dbRenderCercanas(sorted);
       });
     });
+
+    // ── MUTATION OBSERVER PARA TEMA CLARO/OSCURO ──
+    (function initThemeObserver() {
+      const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            if (!dbMap || !dbLightTileLocal || !dbDarkTileLocal) return;
+            const newTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTile = newTheme === 'dark' ? dbDarkTileLocal : dbLightTileLocal;
+            
+            if (dbCurrentTile !== newTile) {
+              dbMap.removeLayer(dbCurrentTile);
+              newTile.addTo(dbMap);
+              dbCurrentTile = newTile;
+            }
+          }
+        });
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
   </script>
 </body>
 

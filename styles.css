@@ -1146,6 +1146,53 @@ button.success {
 }
 
 /* Mapa */
+.db-mapa-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.db-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 500;
+    background: var(--card-background);
+    color: var(--text-primary);
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    transition: background-color 0.2s, transform 0.1s;
+    line-height: 1;
+}
+
+.db-fullscreen-btn:hover {
+    background-color: var(--background-color);
+}
+
+.db-fullscreen-btn:active {
+    transform: scale(0.95);
+}
+
+.db-map-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+}
+
+.db-map-fullscreen #db-mapa-container {
+    height: 100% !important;
+    border: none;
+    border-radius: 0;
+}
+
 #db-mapa-container {
     width: 100%;
     height: 420px;
