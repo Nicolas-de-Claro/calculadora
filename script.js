@@ -307,12 +307,20 @@ async function loadLinkButtons(containerId, dataKey) {
       link.className = 'carga-link-btn';
       link.id = item.id;
 
-      // Handle internal forms
+      // Handle internal forms and special actions
       if (item.action === 'internal-form' && item.targetId) {
         link.href = '#';
         link.addEventListener('click', (e) => {
           e.preventDefault();
           showInternalForm(item.targetId);
+        });
+      } else if (item.action === 'open-dashboard') {
+        link.href = '#';
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (typeof window.abrirDashboard === 'function') {
+            window.abrirDashboard();
+          }
         });
       } else {
         link.href = item.url;

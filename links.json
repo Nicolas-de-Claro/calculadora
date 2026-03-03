@@ -77,6 +77,15 @@
     ],
     "herramientas": [
         {
+            "id": "btn-abrir-dashboard",
+            "nombre": "Mapa de Oportunidades",
+            "descripcion": "Splitters con puertos libres cerca de vos",
+            "icono": "📍",
+            "url": "#",
+            "action": "open-dashboard",
+            "color": "#D32F2F"
+        },
+        {
             "id": "consultar-cobertura",
             "nombre": "Consultar Cobertura",
             "descripcion": "Verificar cobertura de servicio fijo",
