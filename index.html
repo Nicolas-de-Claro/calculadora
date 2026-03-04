@@ -218,7 +218,7 @@
           <!-- Header de volver -->
           <header class="form-header">
             <button id="db-btn-cerrar" class="back-btn">← Volver</button>
-            <h3 class="form-title">📍 Mapa de Oportunidades</h3>
+            <h3 class="form-title">🗺️ Mapa de Oportunidades</h3>
           </header>
 
           <!-- Zona de carga -->
@@ -306,35 +306,6 @@
               </div>
             </div>
 
-            <!-- ③ TOP + CALOR -->
-            <div class="db-grid-2">
-              <div class="card">
-                <div class="db-card-header">
-                  <h2>🏆 Top Oportunidades</h2>
-                  <span class="db-badge success">Mejores cajas</span>
-                </div>
-                <div class="db-table-container">
-                  <table id="db-table-top">
-                    <thead>
-                      <tr>
-                        <th>#</th><th>Caja</th><th>Dirección</th>
-                        <th>Libres</th><th>OLT</th><th>Mapa</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="db-card-header">
-                  <h2>📡 Calor por Zona (OLT)</h2>
-                  <span class="db-badge">Interactivo</span>
-                </div>
-                <p class="db-text-dim" style="font-size:0.82rem; margin-bottom:10px;">Tocá una zona para verla en el mapa.</p>
-                <div id="db-calor-container" style="max-height:360px; overflow-y:auto; padding-right:4px;"></div>
-              </div>
-            </div>
 
             <!-- ④ ESTADO GLOBAL -->
             <div class="card">
@@ -344,18 +315,18 @@
               <div class="db-summary-stats">
                 <div class="db-stat-box info">
                   <div class="db-stat-value" id="db-stat-total">0</div>
-                  <div class="db-stat-label">Puntos de Instalación</div>
-                  <div class="db-stat-desc">Cajas mapeadas totales</div>
+                  <div class="db-stat-label">Cajas mapeadas totales</div>
+                  <div class="db-stat-desc">Cajas totales en sistema</div>
                 </div>
                 <div class="db-stat-box success">
                   <div class="db-stat-value db-text-success" id="db-stat-libres">0</div>
-                  <div class="db-stat-label">Inventario Disponible</div>
-                  <div class="db-stat-desc">Total de puertos libres</div>
+                  <div class="db-stat-label">Total de puertos libres</div>
+                  <div class="db-stat-desc">Bocas disponibles hoy</div>
                 </div>
                 <div class="db-stat-box success">
                   <div class="db-stat-value db-text-success" id="db-stat-virgenes">0</div>
                   <div class="db-stat-label">Cajas Nuevas ⭐</div>
-                  <div class="db-stat-desc">0 clientes conectados</div>
+                  <div class="db-stat-desc">Sin clientes activos</div>
                 </div>
                 <div class="db-stat-box warning">
                   <div class="db-stat-value db-text-warning" id="db-stat-peligro">0</div>
@@ -419,7 +390,7 @@
   </div>
 
   <script type="module" src="script.js"></script>
-  <script type="module" src="js/dashboard.js"></script>
+  <script type="module" src="js/dashboard.js?v=2"></script>
   <script src="js/sw-register.js"></script>
 
   <!-- ── DASHBOARD: Leaflet CSS + JS (local dependencies) ── -->

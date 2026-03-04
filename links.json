@@ -80,7 +80,7 @@
             "id": "btn-abrir-dashboard",
             "nombre": "Mapa de Oportunidades",
             "descripcion": "Splitters con puertos libres cerca de vos",
-            "icono": "📍",
+            "icono": "🗺️",
             "url": "#",
             "action": "open-dashboard",
             "color": "#D32F2F"

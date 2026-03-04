@@ -197,7 +197,7 @@
 <body>
 
     <header>
-        <h1>📍 Claro Ventas — Mapa de Oportunidades</h1>
+        <h1>🗺️ Claro Ventas — Mapa de Oportunidades</h1>
         <p>Encontrá tu próxima venta al instante geolocalizando cajas con disponibilidad</p>
     </header>
 
@@ -283,35 +283,6 @@
                 </div>
             </div>
 
-            <!-- ③ TOP + CALOR ── -->
-            <div class="grid-row grid-2">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>🏆 Top Oportunidades</h2>
-                        <span class="badge" style="background: var(--success)">Mejores cajas</span>
-                    </div>
-                    <div class="table-container">
-                        <table id="table-top">
-                            <thead>
-                                <tr>
-                                    <th>#</th><th>Caja</th><th>Dirección</th>
-                                    <th>Libres</th><th>OLT</th><th>Mapa</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2>📡 Calor por Zona (OLT)</h2>
-                        <span class="badge">Interactivo</span>
-                    </div>
-                    <p class="text-dim" style="font-size: 0.85rem; margin-bottom: 10px;">Tocá una zona para verla en el mapa.</p>
-                    <div id="calor-container" style="max-height: 400px; overflow-y: auto; padding-right: 6px;"></div>
-                </div>
-            </div>
 
             <!-- ④ ESTADO GLOBAL (AL FINAL) ── -->
             <div class="card">
@@ -321,18 +292,18 @@
                 <div class="summary-stats">
                     <div class="stat-box info">
                         <div class="stat-value text-main" id="stat-total">0</div>
-                        <div class="stat-label">Puntos de Instalación</div>
-                        <div class="stat-desc">Cajas mapeadas totales</div>
+                        <div class="stat-label">Cajas mapeadas totales</div>
+                        <div class="stat-desc">Cajas totales en sistema</div>
                     </div>
                     <div class="stat-box success">
                         <div class="stat-value text-success" id="stat-libres">0</div>
-                        <div class="stat-label">Inventario Disponible</div>
-                        <div class="stat-desc">Total de puertos libres</div>
+                        <div class="stat-label">Total de puertos libres</div>
+                        <div class="stat-desc">Bocas disponibles hoy</div>
                     </div>
                     <div class="stat-box success">
                         <div class="stat-value text-success" id="stat-virgenes">0</div>
                         <div class="stat-label">Cajas Nuevas ⭐</div>
-                        <div class="stat-desc">0 clientes conectados</div>
+                        <div class="stat-desc">Sin clientes activos</div>
                     </div>
                     <div class="stat-box warning">
                         <div class="stat-value text-warning" id="stat-peligro">0</div>
@@ -530,50 +501,8 @@
             document.getElementById('stat-virgenes').textContent = virgenes.length.toLocaleString();
             document.getElementById('stat-peligro').textContent  = peligro.toLocaleString();
 
-            // TOP
-            topOps.sort((a, b) => {
-                const d = (b.puertosLibres||0) - (a.puertosLibres||0);
-                return d !== 0 ? d : parseFecha(b.fechaModificacion) - parseFecha(a.fechaModificacion);
-            });
-            const tbodyTop = document.querySelector('#table-top tbody');
-            tbodyTop.innerHTML = '';
-            topOps.slice(0, 30).forEach((p, i) => {
-                const tr = document.createElement('tr');
-                const sid = p.id;
-                tr.innerHTML = `
-                    <td>${i+1}</td>
-                    <td>
-                        <strong><span class="caja-link" onclick="irACajaEnMapa(${JSON.stringify(sid)}, ${p._lat}, ${p._lon})">${p.popupContent || '?'}</span></strong><br>
-                        <span class="text-dim" style="font-size:0.75rem">Mov: ${calcularTiempoRelativo(p.fechaModificacion)}</span>
-                    </td>
-                    <td>${formatDireccion(p).substring(0, 30)}</td>
-                    <td class="text-success" style="font-weight:bold">${p.puertosLibres}/${p.puertosTotales||8}</td>
-                    <td><span class="badge" style="background:#444">${p.olt||'-'}</span></td>
-                    <td>${renderMapLink(p._lat, p._lon)}</td>
-                `;
-                tbodyTop.appendChild(tr);
-            });
+            // TOP y CALOR eliminados por requerimiento
 
-            // CALOR
-            const calorContainer = document.getElementById('calor-container');
-            calorContainer.innerHTML = '';
-            const calorArr = Object.entries(calorOlt).sort((a,b) => b[1].libres - a[1].libres);
-            const maxLibres = calorArr.length > 0 ? calorArr[0][1].libres : 1;
-            calorArr.slice(0, 20).forEach(([olt, data]) => {
-                const pct = (data.libres / maxLibres) * 100;
-                const div = document.createElement('div');
-                div.className = 'progress-row';
-                div.id = `row-olt-${olt.replace(/\s+/g, '-')}`;
-                div.onclick = () => filtrarMapaPorOlt(olt, div.id);
-                div.innerHTML = `
-                    <div class="progress-label">
-                        <strong>${olt}</strong>
-                        <span class="text-success">${data.libres} libres</span>
-                    </div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                `;
-                calorContainer.appendChild(div);
-            });
 
             // CAJAS NUEVAS (Vírgenes)
             virgenes.sort((a, b) => parseFecha(b.fechaModificacion) - parseFecha(a.fechaModificacion));

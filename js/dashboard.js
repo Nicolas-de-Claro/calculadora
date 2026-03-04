@@ -237,50 +237,7 @@ function dbProcesarData() {
     document.getElementById('db-stat-virgenes').textContent = virgenes.length.toLocaleString();
     document.getElementById('db-stat-peligro').textContent = peligro.toLocaleString();
 
-    // TOP
-    topOps.sort((a, b) => {
-        const d = (b.puertosLibres||0) - (a.puertosLibres||0);
-        return d !== 0 ? d : dbParseFecha(b.fechaModificacion) - dbParseFecha(a.fechaModificacion);
-    });
-    const tbodyTop = document.querySelector('#db-table-top tbody');
-    tbodyTop.innerHTML = '';
-    topOps.slice(0, 30).forEach((p, i) => {
-        const sid = p.id;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${i+1}</td>
-            <td>
-                <strong><span class="db-caja-link" data-cajaid="${sid}" data-lat="${p._lat}" data-lon="${p._lon}">${p.popupContent || '?'}</span></strong><br>
-                <span class="db-text-dim" style="font-size:0.75rem">Mov: ${dbCalcTiempoRelativo(p.fechaModificacion)}</span>
-            </td>
-            <td>${dbFormatDireccion(p).substring(0, 30)}</td>
-            <td class="db-text-success" style="font-weight:bold">${p.puertosLibres}/${p.puertosTotales||8}</td>
-            <td><span class="db-badge" style="background:var(--input-background);color:var(--text-primary)">${p.olt||'-'}</span></td>
-            <td>${dbRenderMapLink(p._lat, p._lon)}</td>
-        `;
-        tbodyTop.appendChild(tr);
-    });
-
-    // CALOR
-    const calorContainer = document.getElementById('db-calor-container');
-    calorContainer.innerHTML = '';
-    const calorArr = Object.entries(calorOlt).sort((a,b) => b[1].libres - a[1].libres);
-    const maxLibres = calorArr.length > 0 ? calorArr[0][1].libres : 1;
-    calorArr.slice(0, 20).forEach(([olt, data]) => {
-        const pct = (data.libres / maxLibres) * 100;
-        const div = document.createElement('div');
-        div.className = 'db-progress-row';
-        div.id = `db-row-olt-${olt.replace(/\s+/g, '-')}`;
-        div.setAttribute('data-olt', olt);
-        div.innerHTML = `
-            <div class="db-progress-label">
-                <strong>${olt}</strong>
-                <span class="db-text-success">${data.libres} libres</span>
-            </div>
-            <div class="db-progress-bar-bg"><div class="db-progress-bar-fill" style="width:${pct}%"></div></div>
-        `;
-        calorContainer.appendChild(div);
-    });
+    // (Las secciones TOP y CALOR fueron eliminadas del DOM por requerimiento del usuario)
 
     // CAJAS NUEVAS
     virgenes.sort((a, b) => dbParseFecha(b.fechaModificacion) - dbParseFecha(a.fechaModificacion));
