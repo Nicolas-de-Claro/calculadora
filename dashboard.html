@@ -174,6 +174,25 @@
 
         .map-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
+        /* ── FILTERS ── */
+        .map-filters {
+            display: flex; overflow-x: auto; gap: 8px; padding: 10px 0 15px 0; margin-bottom: 5px;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .map-filters::-webkit-scrollbar { display: none; }
+        .filter-btn {
+            white-space: nowrap; padding: 8px 16px; border-radius: 20px;
+            background-color: var(--bg-dark); border: 1px solid var(--border);
+            color: var(--text-main); font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent;
+        }
+        .filter-btn:hover { background-color: var(--border); }
+        .filter-btn.active { background-color: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 2px 8px rgba(233,69,96, 0.4); }
+        .filter-btn.active.filter-nuevas { background-color: var(--success); border-color: var(--success); box-shadow: 0 2px 8px rgba(0, 184, 148, 0.4); }
+        .filter-btn.active.filter-varias { background-color: var(--warning); border-color: var(--warning); box-shadow: 0 2px 8px rgba(251, 197, 49, 0.4); }
+        .filter-btn.active.filter-urgente { background-color: var(--danger); border-color: var(--danger); box-shadow: 0 2px 8px rgba(255, 118, 117, 0.4); }
+        .filter-btn.active.filter-saturadas { background-color: #424242; border-color: #424242; box-shadow: 0 2px 8px rgba(66, 66, 66, 0.4); }
+
         /* ── RESPONSIVE MOBILE ── */
         @media (max-width: 600px) {
             body { padding: 10px; }
@@ -232,6 +251,16 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Filtros del Mapa -->
+                <div class="map-filters">
+                    <button class="filter-btn active" data-filter="todas" onclick="aplicarFiltroMapa('todas')">Todas</button>
+                    <button class="filter-btn filter-nuevas" data-filter="nuevas" onclick="aplicarFiltroMapa('nuevas')">🟢 Nuevas</button>
+                    <button class="filter-btn filter-varias" data-filter="varias" onclick="aplicarFiltroMapa('varias')">🟡 Varias</button>
+                    <button class="filter-btn filter-urgente" data-filter="urgente" onclick="aplicarFiltroMapa('urgente')">🔴 1 Libre</button>
+                    <button class="filter-btn filter-saturadas" data-filter="saturadas" onclick="aplicarFiltroMapa('saturadas')">⚫ Saturadas</button>
+                </div>
+
                 <div id="mapa-container"></div>
 
                 <!-- 🚶 CERCANAS -->
@@ -491,10 +520,10 @@
                 calorOlt[olt].cajas++;
                 calorOlt[olt].libres += pl;
 
-                if (pl > 0 && p._lat && p._lon) allMarkersData.push(p);
+                if (p._lat && p._lon) allMarkersData.push(p); // Incluye TODAS las cajas, incluso si pl == 0
             });
 
-            dibujarPinesMapa(allMarkersData);
+            aplicarFiltroMapa('todas'); // This triggers drawing markers
 
             document.getElementById('stat-total').textContent    = total.toLocaleString();
             document.getElementById('stat-libres').textContent   = libres.toLocaleString();
@@ -562,12 +591,13 @@
             pinesData.forEach(p => {
                 const pl = p.puertosLibres || 0;
                 const pt = p.puertosTotales || 8;
-                let color = '#f1c40f';
-                if (pl === pt) color = '#2ecc71';
-                if (pl === 1)  color = '#e74c3c';
+                let color = '#f1c40f'; // Varias: amarillo
+                if (pl === pt && pt > 0) color = '#2ecc71'; // Nuevas: verde
+                else if (pl === 1)  color = '#e74c3c'; // Urgente: rojo
+                else if (pl === 0) color = '#424242'; // Saturadas: gris oscuro
 
                 const cm = L.circleMarker([p._lat, p._lon], {
-                    radius: 7, fillColor: color, color: '#000',
+                    radius: 7, fillColor: color, color: pl === 0 ? '#fff' : '#000',
                     weight: 1, opacity: 1, fillOpacity: 0.85
                 });
 
@@ -590,6 +620,47 @@
             }
         }
 
+        function aplicarFiltroMapa(filtroTipo) {
+            if (!allMarkersData || allMarkersData.length === 0) return;
+            
+            // Manage UI active state
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.filter-btn[data-filter="${filtroTipo}"]`);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            let filterData = [];
+
+            switch(filtroTipo) {
+                case 'nuevas':
+                    filterData = allMarkersData.filter(p => p.puertosLibres === (p.puertosTotales || 8));
+                    break;
+                case 'varias':
+                    filterData = allMarkersData.filter(p => p.puertosLibres > 1 && p.puertosLibres < (p.puertosTotales || 8));
+                    break;
+                case 'urgente':
+                    filterData = allMarkersData.filter(p => p.puertosLibres === 1);
+                    break;
+                case 'saturadas':
+                    filterData = allMarkersData.filter(p => p.puertosLibres === 0);
+                    break;
+                case 'todas':
+                default:
+                    filterData = allMarkersData.filter(p => p.puertosLibres > 0 || filtroTipo === 'todas'); 
+                    break;
+            }
+
+            dibujarPinesMapa(filterData);
+            document.getElementById('map-title').innerHTML = `🗺️ Mapa — Filtro: <b>${filtroTipo.charAt(0).toUpperCase() + filtroTipo.slice(1)}</b>`;
+            const btnReset = document.getElementById('btnResetMap');
+            btnReset.classList.remove('hidden');
+            btnReset.style.display = 'inline-flex';
+
+            if(filtroTipo === 'todas') {
+                document.getElementById('map-title').textContent = '🗺️ Mapa Interactivo en Terreno';
+                btnReset.style.display = 'none';
+            }
+        }
+
         function filtrarMapaPorOlt(oltClickeada, rowId) {
             document.querySelectorAll('.progress-row').forEach(r => r.classList.remove('active'));
             document.getElementById(rowId).classList.add('active');
@@ -603,9 +674,7 @@
 
         function restaurarMapaTotal() {
             document.querySelectorAll('.progress-row').forEach(r => r.classList.remove('active'));
-            document.getElementById('map-title').innerHTML = '🗺️ Mapa Interactivo en Terreno';
-            document.getElementById('btnResetMap').style.display = 'none';
-            dibujarPinesMapa(allMarkersData);
+            aplicarFiltroMapa('todas');
         }
 
         // ── GEOLOCALIZACIÓN ──

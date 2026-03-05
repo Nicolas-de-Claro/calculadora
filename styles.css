@@ -1426,3 +1426,44 @@ button.success {
 
 /* Clase utilitaria hidden (usada por JS del dashboard) */
 .db-hidden { display: none !important; }
+
+/* ========== Dashboard Map Filters ========== */
+.db-map-filters {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 10px 0 15px 0;
+    margin-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+.db-map-filters::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+.db-filter-btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.db-filter-btn:hover {
+    background-color: var(--border-color);
+}
+.db-filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.4);
+}
+.db-filter-btn.active.filter-nuevas { background-color: var(--success-color); border-color: var(--success-color); box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4); }
+.db-filter-btn.active.filter-varias { background-color: #f39c12; border-color: #f39c12; box-shadow: 0 2px 8px rgba(243, 156, 18, 0.4); }
+.db-filter-btn.active.filter-urgente { background-color: #e53935; border-color: #e53935; box-shadow: 0 2px 8px rgba(229, 57, 53, 0.4); }
+.db-filter-btn.active.filter-saturadas { background-color: #424242; border-color: #424242; box-shadow: 0 2px 8px rgba(66, 66, 66, 0.4); }
+

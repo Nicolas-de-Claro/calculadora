@@ -252,6 +252,16 @@
                   </button>
                 </div>
               </div>
+
+              <!-- Filtros del Mapa -->
+              <div class="db-map-filters">
+                <button class="db-filter-btn active" data-filter="todas">Todas</button>
+                <button class="db-filter-btn filter-nuevas" data-filter="nuevas">🟢 Nuevas</button>
+                <button class="db-filter-btn filter-varias" data-filter="varias">🟡 Varias</button>
+                <button class="db-filter-btn filter-urgente" data-filter="urgente">🔴 1 Libre</button>
+                <button class="db-filter-btn filter-saturadas" data-filter="saturadas">⚫ Saturadas</button>
+              </div>
+
               <div class="db-mapa-wrapper">
                 <button id="db-btn-fullscreen" class="db-fullscreen-btn" title="Pantalla Completa">⛶</button>
                 <div id="db-mapa-container"></div>
@@ -390,7 +400,7 @@
   </div>
 
   <script type="module" src="script.js"></script>
-  <script type="module" src="js/dashboard.js?v=2"></script>
+  <script type="module" src="js/dashboard.js?v=3"></script>
   <script src="js/sw-register.js"></script>
 
   <!-- ── DASHBOARD: Leaflet CSS + JS (local dependencies) ── -->

@@ -228,10 +228,10 @@ function dbProcesarData() {
         if (!calorOlt[olt]) calorOlt[olt] = { cajas: 0, libres: 0 };
         calorOlt[olt].cajas++;
         calorOlt[olt].libres += pl;
-        if (pl > 0 && p._lat && p._lon) dbAllMarkersData.push(p);
+        if (p._lat && p._lon) dbAllMarkersData.push(p); // Include all boxes, even those with 0 free ports
     });
 
-    dbDibujarPinesMapa(dbAllMarkersData);
+    dbAplicarFiltroMapa('todas'); // This will call dbDibujarPinesMapa with the filtered subset
     document.getElementById('db-stat-total').textContent = total.toLocaleString();
     document.getElementById('db-stat-libres').textContent = libres.toLocaleString();
     document.getElementById('db-stat-virgenes').textContent = virgenes.length.toLocaleString();
@@ -293,10 +293,13 @@ function dbDibujarPinesMapa(pinesData) {
         const pl = p.puertosLibres || 0;
         const pt = p.puertosTotales || 8;
         let color = '#f39c12';
-        if (pl === pt) color = '#27ae60';
-        if (pl === 1)  color = '#e53935';
+        
+        if (pl === pt && pt > 0) color = '#27ae60';
+        else if (pl === 1)  color = '#e53935';
+        else if (pl === 0) color = '#424242'; // Dark grey for saturated
+        
         const cm = L.circleMarker([p._lat, p._lon], {
-            radius: 7, fillColor: color, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.85
+            radius: 7, fillColor: color, color: pl === 0 ? '#fff' : '#000', weight: 1, opacity: 1, fillOpacity: 0.85
         });
         cm.bindPopup(`
             <h4>🛒 ${p.popupContent || 'Caja'}</h4>
@@ -315,6 +318,46 @@ function dbDibujarPinesMapa(pinesData) {
     }
 }
 
+function dbAplicarFiltroMapa(filtroTipo) {
+    if (!dbAllMarkersData || dbAllMarkersData.length === 0) return;
+    
+    // Manage UI active state
+    document.querySelectorAll('.db-filter-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.db-filter-btn[data-filter="${filtroTipo}"]`);
+    if(activeBtn) activeBtn.classList.add('active');
+
+    let filterData = [];
+
+    switch(filtroTipo) {
+        case 'nuevas':
+            filterData = dbAllMarkersData.filter(p => p.puertosLibres === (p.puertosTotales || 8));
+            break;
+        case 'varias':
+            filterData = dbAllMarkersData.filter(p => p.puertosLibres > 1 && p.puertosLibres < (p.puertosTotales || 8));
+            break;
+        case 'urgente':
+            filterData = dbAllMarkersData.filter(p => p.puertosLibres === 1);
+            break;
+        case 'saturadas':
+            filterData = dbAllMarkersData.filter(p => p.puertosLibres === 0);
+            break;
+        case 'todas':
+        default:
+            filterData = dbAllMarkersData.filter(p => p.puertosLibres > 0 || filtroTipo === 'todas'); 
+            break;
+    }
+
+    dbDibujarPinesMapa(filterData);
+    document.getElementById('db-map-title').innerHTML = `🗺️ Mapa — Filtro: <b>${filtroTipo.charAt(0).toUpperCase() + filtroTipo.slice(1)}</b>`;
+    document.getElementById('db-btn-reset').classList.remove('db-hidden');
+
+    // Special case for 'todas' to reset the map title correctly
+    if(filtroTipo === 'todas') {
+        document.getElementById('db-map-title').textContent = '🗺️ Mapa Interactivo en Terreno';
+        document.getElementById('db-btn-reset').classList.add('db-hidden');
+    }
+}
+
 function dbFiltrarMapaPorOlt(oltClickeada, rowId) {
     document.querySelectorAll('.db-progress-row').forEach(r => r.classList.remove('active'));
     document.getElementById(rowId).classList.add('active');
@@ -326,9 +369,7 @@ function dbFiltrarMapaPorOlt(oltClickeada, rowId) {
 
 function dbRestaurarMapaTotal() {
     document.querySelectorAll('.db-progress-row').forEach(r => r.classList.remove('active'));
-    document.getElementById('db-map-title').textContent = '🗺️ Mapa Interactivo en Terreno';
-    document.getElementById('db-btn-reset').classList.add('db-hidden');
-    dbDibujarPinesMapa(dbAllMarkersData);
+    dbAplicarFiltroMapa('todas');
 }
 
 // ── GEOLOCALIZACIÓN ──
@@ -460,6 +501,13 @@ export function initDashboardEventBindings() {
         if (row) {
             dbFiltrarMapaPorOlt(row.dataset.olt, row.id);
         }
+    });
+
+    document.querySelector('.db-map-filters')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.db-filter-btn');
+        if(!btn) return;
+        const filtroActivo = btn.dataset.filter;
+        dbAplicarFiltroMapa(filtroActivo);
     });
 
     document.getElementById('db-btn-cerrar')?.addEventListener('click', cerrarDashboard);
