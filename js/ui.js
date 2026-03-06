@@ -39,11 +39,15 @@ export function renderBreakdown(items) {
  */
 export function updateTotalPrice(price) {
     const element = document.querySelector(DOM_SELECTORS.TOTAL_PRICE);
+    const stickyElement = document.querySelector(DOM_SELECTORS.STICKY_PRICE);
     const previousPrice = element.textContent;
     const newPrice = formatCurrency(price);
 
     if (previousPrice !== newPrice) {
         element.textContent = newPrice;
+        if (stickyElement) {
+            stickyElement.textContent = newPrice;
+        }
         animatePulse(element);
     }
 }
@@ -169,6 +173,83 @@ export function initThemeSystem() {
                 applyTheme(e.matches ? THEMES.DARK : THEMES.LIGHT);
             }
         });
+    }
+}
+
+/**
+ * Inicializa las mejoras UX Thumb-Friendly
+ */
+export function initThumbFriendlyUX() {
+    // 1. Manejo de Pill Buttons
+    const pillGroups = document.querySelectorAll(DOM_SELECTORS.PILL_GROUP);
+    
+    pillGroups.forEach(group => {
+        const targetSelector = group.getAttribute('data-target');
+        const targetSelect = document.querySelector(targetSelector);
+        const buttons = group.querySelectorAll(DOM_SELECTORS.PILL_BTN);
+        
+        // Initial state sync
+        if (targetSelect) {
+            const currentValue = targetSelect.value;
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-value') === currentValue) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.getAttribute('data-value');
+                
+                // UI feedback
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update hidden select and trigger change
+                if (targetSelect) {
+                    targetSelect.value = value;
+                    targetSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                
+                // Vibration feedback if available
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            });
+        });
+    });
+
+    // 2. Sticky Copy Button
+    const stickyCopyBtn = document.querySelector(DOM_SELECTORS.STICKY_COPY_BTN);
+    const mainCopyBtn = document.querySelector(DOM_SELECTORS.COPY_SUMMARY_BTN);
+    
+    if (stickyCopyBtn && mainCopyBtn) {
+        stickyCopyBtn.addEventListener('click', () => {
+            mainCopyBtn.click();
+            showButtonFeedback(stickyCopyBtn, '✅ Copiado');
+        });
+    }
+
+    // 3. Smart Sticky Visibility (Hide when .total-card is visible)
+    const stickyBar = document.querySelector(DOM_SELECTORS.STICKY_TOTAL_BAR);
+    const totalCard = document.querySelector('.total-card');
+
+    if (stickyBar && totalCard) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // If totalCard is visible, hide stickyBar
+                if (entry.isIntersecting) {
+                    stickyBar.classList.add('sticky-hidden');
+                } else {
+                    stickyBar.classList.remove('sticky-hidden');
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when at least 10% of totalCard is visible
+        });
+
+        observer.observe(totalCard);
     }
 }
 

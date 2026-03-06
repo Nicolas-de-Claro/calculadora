@@ -53,18 +53,30 @@
               <option value="IP_FIJA">BAF IP Fija</option>
             </select>
           </div>
-          <div class="option">
-            <label for="internet-speed">Velocidad de Internet</label>
-            <select id="internet-speed">
+          <div class="option-pill">
+            <label>Velocidad de Internet</label>
+            <div class="pill-group" data-target="#internet-speed">
+              <button type="button" class="pill-btn" data-value="no">NADA</button>
+              <button type="button" class="pill-btn" data-value="100">100MB</button>
+              <button type="button" class="pill-btn" data-value="300">300MB</button>
+              <button type="button" class="pill-btn" data-value="600">600MB</button>
+            </div>
+            <select id="internet-speed" class="hidden-select">
               <option value="no">No incluir</option>
               <option value="100">100 MB</option>
               <option value="300">300 MB</option>
               <option value="600">600 MB</option>
             </select>
           </div>
-          <div class="option">
-            <label for="add-tv">Servicio de TV</label>
-            <select id="add-tv">
+          <div class="option-pill">
+            <label>Servicio de TV</label>
+            <div class="pill-group" data-target="#add-tv">
+              <button type="button" class="pill-btn" data-value="no">NADA</button>
+              <button type="button" class="pill-btn" data-value="1">1 DECO</button>
+              <button type="button" class="pill-btn" data-value="2">2 DECOS</button>
+              <button type="button" class="pill-btn" data-value="3">3 DECOS</button>
+            </div>
+            <select id="add-tv" class="hidden-select">
               <option value="no">No incluir</option>
               <option value="1">1 Deco</option>
               <option value="2">2 Decos</option>
@@ -130,6 +142,17 @@
         </div>
       </div>
     </main>
+
+    <!-- Sticky Total Summary -->
+    <div id="sticky-total-bar" class="sticky-total-bar">
+      <div class="sticky-total-content">
+        <div class="sticky-total-info">
+          <span class="sticky-label">Total estimado</span>
+          <span id="sticky-price" class="sticky-price">$0.00</span>
+        </div>
+        <button id="sticky-copy-btn" class="sticky-action-btn">📋 Copiar</button>
+      </div>
+    </div>
 
     <!-- Tab: Carga de Cliente -->
     <section id="tab-carga" class="tab-content" role="tabpanel" hidden>

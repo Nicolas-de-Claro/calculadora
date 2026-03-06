@@ -13,6 +13,9 @@ export const DOM_SELECTORS = {
     ADD_LINE_BTN: '#add-line-btn',
     PRICE_BREAKDOWN: '#price-breakdown',
     TOTAL_SEPARATOR: '.total-separator',
+    STICKY_PRICE: '#sticky-price',
+    STICKY_TOTAL_BAR: '#sticky-total-bar',
+    STICKY_COPY_BTN: '#sticky-copy-btn',
 
     // Beneficios
     HAS_CLARO_ABONO: '#has-claro-abono',
@@ -38,7 +41,9 @@ export const DOM_SELECTORS = {
     PORT_REQUEST: '.port-request',
     DATA_AMOUNT: '.data-amount',
     EXTRA_PACK: '.extra-pack',
-    REMOVE_LINE_BTN: '.remove-line-btn'
+    REMOVE_LINE_BTN: '.remove-line-btn',
+    PILL_BTN: '.pill-btn',
+    PILL_GROUP: '.pill-group'
 };
 
 // Claves de localStorage

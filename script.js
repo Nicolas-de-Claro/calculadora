@@ -22,7 +22,8 @@ import {
   hideLoading,
   initThemeSystem,
   toggleTheme,
-  showButtonFeedback
+  showButtonFeedback,
+  initThumbFriendlyUX
 } from './js/ui.js';
 import { initConfigModal } from './js/config.js';
 import { exportToPdf } from './js/pdf-export.js';
@@ -63,6 +64,9 @@ function initializeApp() {
 
   // Inicializar tabs de navegación
   initTabs();
+
+  // Inicializar mejoras UX Thumb-Friendly
+  initThumbFriendlyUX();
 
   // Cargar botones de carga de cliente
   loadCargaButtons();
@@ -258,6 +262,12 @@ function initTabs() {
         content.classList.toggle('active', isTarget);
         content.hidden = !isTarget;
       });
+
+      // Gestionar visibilidad del Sticky Total Bar (solo en Cotizador)
+      const stickyBar = document.getElementById('sticky-total-bar');
+      if (stickyBar) {
+        stickyBar.style.display = targetTab === 'calculadora' ? 'flex' : 'none';
+      }
 
       // Actualizar título de la página
       if (targetTab === 'calculadora') {
