@@ -1297,7 +1297,98 @@ button.success {
     gap: 8px;
     margin: 0;
 }
-.db-map-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+/* ── DASHBOARD: MAPA DE OPORTUNIDADES (PWA INTEGRATION) ── */
+.dashboard-expanded { background: #121212 !important; }
+
+.db-map-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap; /* Keep existing flex-wrap */
+}
+
+/* ── TOGGLE SWITCH (Auto-Tracking) ── */
+.db-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color); /* Changed from --border to --border-color */
+  margin-right: 4px;
+}
+
+.db-toggle-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.db-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 16px;
+}
+
+.db-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.db-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #555;
+  transition: .4s;
+  border-radius: 16px;
+}
+
+.db-slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .db-slider {
+  background-color: var(--success-color); /* Changed from --success to --success-color */
+}
+
+input:checked + .db-slider:before {
+  transform: translateX(16px);
+}
+
+/* Botón GPS */
+.db-btn-gps {
+  background: var(--success-color); /* Changed from --success-gradient to --success-color */
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  /* Removed existing box-shadow, opacity, transform, white-space, -webkit-tap-highlight-color, font-family */
+}
+.db-btn-gps:hover { opacity: 0.88; transform: scale(1.03); } /* Kept existing hover */
+.db-btn-gps:disabled { background: var(--text-secondary); cursor: not-allowed; transform: none; opacity: 0.6; } /* Kept existing disabled */
 
 /* Badges */
 .db-badge {

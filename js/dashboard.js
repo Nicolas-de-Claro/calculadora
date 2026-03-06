@@ -10,6 +10,7 @@ let dbUserCircle = null;
 let dbAllMarkersData = [];
 let dbCercanasCached = [];
 let dbSortState = { col: null, dir: 1 };
+let dbGeoWatchId = null;
 
 let dbLightTileLocal = null;
 let dbDarkTileLocal = null;
@@ -160,6 +161,14 @@ function dbLimpiarArchivo() {
     document.getElementById('db-file-info').textContent = "";
     document.getElementById('db-drop-zone').classList.remove('loaded');
     document.getElementById('db-results-container').classList.remove('visible');
+    
+    if (dbGeoWatchId) {
+        navigator.geolocation.clearWatch(dbGeoWatchId);
+        dbGeoWatchId = null;
+        const autoBtn = document.getElementById('db-btn-auto-geo');
+        if (autoBtn) autoBtn.checked = false;
+    }
+    
     showInfo("Archivo limpiado.");
 }
 
@@ -312,7 +321,7 @@ function dbDibujarPinesMapa(pinesData) {
         dbMarkersLayer.addLayer(cm);
         if (p.id !== undefined) dbMarkersMap[p.id] = cm;
     });
-    if (markersArray.length > 0) {
+    if (markersArray.length > 0 && !dbGeoWatchId) {
         const group = new L.featureGroup(markersArray);
         dbMap.flyToBounds(group.getBounds(), { padding: [30, 30], duration: 0.5 });
     }
@@ -379,49 +388,94 @@ function dbCalcDistance(lat1, lon1, lat2, lon2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * 1000;
 }
 
-function dbGeolocalizar() {
+function dbGeolocalizar(isAuto = false) {
     if (!dbDataHoy) { showError("Primero cargá el archivo JSON del escaneo."); return; }
     if (!navigator.geolocation) { showError("Tu navegador no soporta geolocalización."); return; }
-    const btn = document.getElementById('db-btn-geo');
-    btn.disabled = true;
-    btn.innerHTML = '⏳ Obteniendo GPS...';
     
-    // Opcional: CSS animation spinner
-    // btn.innerHTML = '<span style="display:inline-block; width:12px; height:12px; border:2px solid; border-radius:50%; border-right-color:transparent; animation:spin 1s linear infinite;"></span> Buscando...';
+    const btn = document.getElementById('db-btn-geo');
+    if (!isAuto) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Obteniendo GPS...';
+    }
     
     navigator.geolocation.getCurrentPosition(
         position => {
-            const lat = position.coords.latitude, lon = position.coords.longitude;
-            btn.disabled = false;
-            btn.innerHTML = '🎯 Actualizar mi ubicación';
-            if (dbUserMarker) dbMap.removeLayer(dbUserMarker);
-            if (dbUserCircle) dbMap.removeLayer(dbUserCircle);
-            dbUserMarker = L.marker([lat, lon]).addTo(dbMap).bindPopup("<b>👋 ¡Estás acá!</b>").openPopup();
-            dbUserCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400 }).addTo(dbMap);
-            dbMap.setView([lat, lon], 16);
-            const cercanas = [];
-            Object.values(dbDataHoy).forEach(p => {
-                if (p._lat && p._lon && p.puertosLibres > 0) {
-                    const d = dbCalcDistance(lat, lon, p._lat, p._lon);
-                    if (d <= 400) cercanas.push({ p, dist: d, dias: dbDiasDesde(p.fechaModificacion), libres: p.puertosLibres || 0 });
-                }
-            });
-            cercanas.sort((a,b) => a.dist - b.dist);
-            dbCercanasCached = cercanas;
-            dbSortState = { col: 'dist', dir: 1 };
-            dbActualizarSortHeaders('dist', 1);
-            dbRenderCercanas(cercanas);
-            document.getElementById('db-badge-cercanas').textContent = cercanas.length;
-            document.getElementById('db-cercanas-container').classList.remove('db-hidden');
-            showSuccess(`Ubicación actualizada. Encontramos ${cercanas.length} opciones cerca.`);
+            dbProcesarUbicacion(position, isAuto);
         },
         error => {
-            btn.disabled = false;
-            btn.innerHTML = '🎯 Cajas cerca de mí';
-            showError(`Error de GPS: ${error.message}. Asegurate de dar permisos de ubicación.`);
+            if (!isAuto) {
+                btn.disabled = false;
+                btn.innerHTML = '🎯 Cajas cerca de mí';
+                showError(`Error de GPS: ${error.message}. Asegurate de dar permisos de ubicación.`);
+            }
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+}
+
+function dbProcesarUbicacion(position, isAuto) {
+    const lat = position.coords.latitude, lon = position.coords.longitude;
+    const btn = document.getElementById('db-btn-geo');
+    
+    if (!isAuto) {
+        btn.disabled = false;
+        btn.innerHTML = '🎯 Actualizar mi ubicación';
+    }
+
+    if (dbUserMarker) dbMap.removeLayer(dbUserMarker);
+    if (dbUserCircle) dbMap.removeLayer(dbUserCircle);
+    dbUserMarker = L.marker([lat, lon]).addTo(dbMap).bindPopup("<b>👋 ¡Estás acá!</b>");
+    if (!isAuto) dbUserMarker.openPopup();
+    
+    dbUserCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400 }).addTo(dbMap);
+    
+    // Si es auto-seguimiento o primera vez, centrar mapa.
+    dbMap.setView([lat, lon], 16);
+
+    const cercanas = [];
+    Object.values(dbDataHoy).forEach(p => {
+        if (p._lat && p._lon && p.puertosLibres > 0) {
+            const d = dbCalcDistance(lat, lon, p._lat, p._lon);
+            if (d <= 400) cercanas.push({ p, dist: d, dias: dbDiasDesde(p.fechaModificacion), libres: p.puertosLibres || 0 });
+        }
+    });
+    
+    cercanas.sort((a,b) => a.dist - b.dist);
+    dbCercanasCached = cercanas;
+    dbSortState = { col: 'dist', dir: 1 };
+    dbActualizarSortHeaders('dist', 1);
+    dbRenderCercanas(cercanas);
+    document.getElementById('db-badge-cercanas').textContent = cercanas.length;
+    document.getElementById('db-cercanas-container').classList.remove('db-hidden');
+    
+    if (!isAuto) {
+        showSuccess(`Ubicación actualizada. Encontramos ${cercanas.length} opciones cerca.`);
+    }
+}
+
+function dbToggleAutoGeo() {
+    const isChecked = document.getElementById('db-btn-auto-geo').checked;
+    if (isChecked) {
+        if (!navigator.geolocation) { 
+            showError("Tu navegador no soporta geolocalización."); 
+            document.getElementById('db-btn-auto-geo').checked = false;
+            return; 
+        }
+        
+        dbGeolocalizar(true);
+        dbGeoWatchId = navigator.geolocation.watchPosition(
+            position => dbProcesarUbicacion(position, true),
+            error => {
+                console.error("GPS Watch Error:", error);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 }
+        );
+    } else {
+        if (dbGeoWatchId) {
+            navigator.geolocation.clearWatch(dbGeoWatchId);
+            dbGeoWatchId = null;
+        }
+    }
 }
 
 function dbRenderCercanas(lista) {
@@ -492,7 +546,8 @@ export function initDashboardEventBindings() {
     });
 
     document.getElementById('db-btn-reset')?.addEventListener('click', dbRestaurarMapaTotal);
-    document.getElementById('db-btn-geo')?.addEventListener('click', dbGeolocalizar);
+    document.getElementById('db-btn-geo')?.addEventListener('click', () => dbGeolocalizar(false));
+    document.getElementById('db-btn-auto-geo')?.addEventListener('change', dbToggleAutoGeo);
     document.getElementById('db-btn-fullscreen')?.addEventListener('click', dbToggleFullScreen);
 
     // Sidebar Calor Progress row click delegation

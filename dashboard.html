@@ -193,6 +193,27 @@
         .filter-btn.active.filter-urgente { background-color: var(--danger); border-color: var(--danger); box-shadow: 0 2px 8px rgba(255, 118, 117, 0.4); }
         .filter-btn.active.filter-saturadas { background-color: #424242; border-color: #424242; box-shadow: 0 2px 8px rgba(66, 66, 66, 0.4); }
 
+        /* ── TOGGLE SWITCH (Auto-Tracking) ── */
+        .toggle-container {
+            display: flex; align-items: center; gap: 8px; margin-right: 12px;
+            background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        .toggle-switch {
+            position: relative; display: inline-block; width: 34px; height: 18px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555; transition: .4s; border-radius: 18px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(16px); }
+
         /* ── RESPONSIVE MOBILE ── */
         @media (max-width: 600px) {
             body { padding: 10px; }
@@ -210,6 +231,7 @@
             .btn-gps { padding: 10px 14px; font-size: 0.88rem; }
             .card-header h2 { font-size: 1rem; }
             .map-header-actions { width: 100%; justify-content: flex-end; }
+            .toggle-container { padding: 4px 10px; margin-right: 8px; }
         }
     </style>
 </head>
@@ -243,6 +265,13 @@
                 <div class="card-header">
                     <h2 id="map-title">🗺️ Mapa Interactivo en Terreno</h2>
                     <div class="map-header-actions">
+                        <div class="toggle-container">
+                            <label for="btnAutoGeo" style="font-size: 0.8rem; font-weight: 600; cursor: pointer;">Auto-Seguimiento</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="btnAutoGeo" onchange="toggleAutoGeo()" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
                         <button id="btnResetMap" class="btn-gps hidden" onclick="restaurarMapaTotal()" style="background:#555">
                             🔄 Ver toda la ciudad
                         </button>
@@ -357,6 +386,7 @@
         let allMarkersData = [];
         let cercanasCached = []; // para sort
         let sortState = { col: null, dir: 1 }; // dir: 1=asc, -1=desc
+        let geoWatchId = null;
 
         // ── HELPERS ──
         function formatDireccion(p) {
@@ -451,6 +481,11 @@
             document.getElementById('info-hoy').textContent = "";
             dropZone.classList.remove('loaded');
             document.getElementById('results-container').classList.remove('visible');
+            if(geoWatchId) {
+                navigator.geolocation.clearWatch(geoWatchId);
+                geoWatchId = null;
+                document.getElementById('btnAutoGeo').checked = false;
+            }
         }
 
         function handleFile(file) {
@@ -614,7 +649,7 @@
                 if (p.id !== undefined) markersMap[p.id] = cm;
             });
 
-            if (markersArray.length > 0) {
+            if (markersArray.length > 0 && !geoWatchId) {
                 const group = new L.featureGroup(markersArray);
                 map.flyToBounds(group.getBounds(), { padding: [30, 30], duration: 0.5 });
             }
@@ -684,49 +719,94 @@
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * 1000;
         }
 
-        function geolocalizar() {
+        function geolocalizar(isAuto = false) {
             if (!dataHoy) { alert("Primero cargá el archivo JSON del escaneo."); return; }
             if (!navigator.geolocation) { alert("Tu navegador no soporta geolocalización."); return; }
 
             const btn = document.getElementById('btnGeo');
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Obteniendo GPS...';
+            if(!isAuto) {
+                btn.disabled = true;
+                btn.innerHTML = '⏳ Obteniendo GPS...';
+            }
 
             navigator.geolocation.getCurrentPosition(
                 position => {
-                    const lat = position.coords.latitude, lon = position.coords.longitude;
-                    btn.disabled = false;
-                    btn.innerHTML = '🎯 Actualizar mi ubicación';
-
-                    if (userMarker) map.removeLayer(userMarker);
-                    if (userCircle) map.removeLayer(userCircle);
-                    userMarker = L.marker([lat, lon]).addTo(map).bindPopup("<b>👋 ¡Estás acá!</b>").openPopup();
-                    userCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400 }).addTo(map);
-                    map.setView([lat, lon], 16);
-
-                    const cercanas = [];
-                    Object.values(dataHoy).forEach(p => {
-                        if (p._lat && p._lon && p.puertosLibres > 0) {
-                            const d = calcDistance(lat, lon, p._lat, p._lon);
-                            if (d <= 400) cercanas.push({ p, dist: d, dias: diasDesde(p.fechaModificacion), libres: p.puertosLibres || 0 });
-                        }
-                    });
-
-                    cercanas.sort((a,b) => a.dist - b.dist);
-                    cercanasCached = cercanas;
-                    sortState = { col: 'dist', dir: 1 };
-                    actualizarSortHeaders('dist', 1);
-                    renderCercanas(cercanas);
-                    document.getElementById('badge-cercanas').textContent = cercanas.length;
-                    document.getElementById('cercanas-container').classList.remove('hidden');
+                    procesarUbicacion(position, isAuto);
                 },
                 error => {
-                    btn.disabled = false;
-                    btn.innerHTML = '🎯 Cajas cerca de mí';
-                    alert(`Error de GPS: ${error.message}. Asegurate de dar permisos de ubicación al navegador.`);
+                    if(!isAuto) {
+                        btn.disabled = false;
+                        btn.innerHTML = '🎯 Cajas cerca de mí';
+                        alert(`Error de GPS: ${error.message}. Asegurate de dar permisos de ubicación al navegador.`);
+                    }
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
+        }
+
+        function procesarUbicacion(position, isAuto) {
+            const lat = position.coords.latitude, lon = position.coords.longitude;
+            const btn = document.getElementById('btnGeo');
+            
+            if(!isAuto) {
+                btn.disabled = false;
+                btn.innerHTML = '🎯 Actualizar mi ubicación';
+            }
+
+            if (userMarker) map.removeLayer(userMarker);
+            if (userCircle) map.removeLayer(userCircle);
+            userMarker = L.marker([lat, lon]).addTo(map).bindPopup("<b>👋 ¡Estás acá!</b>");
+            if(!isAuto) userMarker.openPopup();
+            
+            userCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400 }).addTo(map);
+            
+            // Si es auto-seguimiento o primera vez, centrar mapa. 
+            // Si el usuario está moviendo el mapa manualmente, tal vez no centrar?
+            // Por ahora centramos siempre si es un refresh de ubicación.
+            map.setView([lat, lon], 16);
+
+            const cercanas = [];
+            Object.values(dataHoy).forEach(p => {
+                if (p._lat && p._lon && p.puertosLibres > 0) {
+                    const d = calcDistance(lat, lon, p._lat, p._lon);
+                    if (d <= 400) cercanas.push({ p, dist: d, dias: diasDesde(p.fechaModificacion), libres: p.puertosLibres || 0 });
+                }
+            });
+
+            cercanas.sort((a,b) => a.dist - b.dist);
+            cercanasCached = cercanas;
+            sortState = { col: 'dist', dir: 1 };
+            actualizarSortHeaders('dist', 1);
+            renderCercanas(cercanas);
+            document.getElementById('badge-cercanas').textContent = cercanas.length;
+            document.getElementById('cercanas-container').classList.remove('hidden');
+        }
+
+        function toggleAutoGeo() {
+            const isChecked = document.getElementById('btnAutoGeo').checked;
+            if (isChecked) {
+                if (!navigator.geolocation) { 
+                    alert("Tu navegador no soporta geolocalización."); 
+                    document.getElementById('btnAutoGeo').checked = false;
+                    return; 
+                }
+                
+                // Pedir ubicación inicial y arrancar el watch
+                geolocalizar(true);
+                geoWatchId = navigator.geolocation.watchPosition(
+                    position => procesarUbicacion(position, true),
+                    error => {
+                        console.error("GPS Watch Error:", error);
+                        // No alertamos en cada micro-error de watch para no molestar
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 }
+                );
+            } else {
+                if (geoWatchId) {
+                    navigator.geolocation.clearWatch(geoWatchId);
+                    geoWatchId = null;
+                }
+            }
         }
 
         function renderCercanas(lista) {
