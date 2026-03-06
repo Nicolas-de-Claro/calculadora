@@ -19,15 +19,6 @@
             "category": "BAF"
         },
         {
-            "id": "teccom-manantial",
-            "nombre": "TECCOM Manantial Sur",
-            "descripcion": "Formulario Teccom Manantial",
-            "icono": "🏘️",
-            "url": "https://docs.google.com/forms/d/e/1FAIpQLSct1UOMfgdBxdmBEpiqxoSOxoJjDvP2zIDdrhyoWpfz2eTcEw/viewform",
-            "color": "#00897B",
-            "category": "BAF"
-        },
-        {
             "id": "movil-noa",
             "nombre": "MOVIL-NOA BAF",
             "descripcion": "Planilla MOVIL-NOA",
