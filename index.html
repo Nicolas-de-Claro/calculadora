@@ -29,130 +29,12 @@
 <body>
   <div class="main-container">
     <header class="header" role="banner">
-      <h1 id="page-title">Cotizador</h1>
+      <h1 id="page-title">Herramientas</h1>
       <div class="header-buttons">
         <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Cambiar tema">🌙</button>
         <button id="config-btn" class="config-btn" aria-label="Abrir configuración de precios">⚙️</button>
       </div>
     </header>
-
-    <!-- Tab: Calculadora -->
-    <main id="tab-calculadora" class="tab-content active" role="tabpanel">
-      <div class="carga-section">
-        <h2 class="section-title">Cotizador</h2>
-        <p class="section-subtitle">Calcula el presupuesto personalizado para tu cliente</p>
-
-        <!-- Card de Internet y TV -->
-        <div class="card">
-          <h2 class="card-title">Internet y TV</h2>
-          <div class="option">
-            <label for="baf-type">Tipo de Plan</label>
-            <select id="baf-type">
-              <option value="RESIDENCIAL">BAF Residencial</option>
-              <option value="IP_DINAMICA">BAF IP Dinámica</option>
-              <option value="IP_FIJA">BAF IP Fija</option>
-            </select>
-          </div>
-          <div class="option-pill">
-            <label>Velocidad de Internet</label>
-            <div class="pill-group" data-target="#internet-speed">
-              <button type="button" class="pill-btn" data-value="no">NO</button>
-              <button type="button" class="pill-btn" data-value="100">100MB</button>
-              <button type="button" class="pill-btn" data-value="300">300MB</button>
-              <button type="button" class="pill-btn" data-value="600">600MB</button>
-            </div>
-            <select id="internet-speed" class="hidden-select">
-              <option value="no">No incluir</option>
-              <option value="100">100 MB</option>
-              <option value="300">300 MB</option>
-              <option value="600">600 MB</option>
-            </select>
-          </div>
-          <div class="option-pill">
-            <label>Servicio de TV</label>
-            <div class="pill-group" data-target="#add-tv">
-              <button type="button" class="pill-btn" data-value="no">NO</button>
-              <button type="button" class="pill-btn" data-value="1">1 DECO</button>
-              <button type="button" class="pill-btn" data-value="2">2 DECOS</button>
-              <button type="button" class="pill-btn" data-value="3">3 DECOS</button>
-            </div>
-            <select id="add-tv" class="hidden-select">
-              <option value="no">No incluir</option>
-              <option value="1">1 Deco</option>
-              <option value="2">2 Decos</option>
-              <option value="3">3 Decos</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Sección de Portabilidad -->
-        <div id="portability-section"></div>
-
-        <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
-
-        <!-- Opciones de Pago -->
-        <div class="card">
-          <h2 class="card-title">Beneficios</h2>
-          <div class="option">
-            <label for="has-claro-abono">Descuento Abono Claro</label>
-            <select id="has-claro-abono">
-              <option value="no">No tiene</option>
-              <option value="1">1 Línea</option>
-              <option value="2">2 o más</option>
-            </select>
-          </div>
-          <div class="payment-option">
-            <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="pack-futbol-checkbox" />
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="payment-option">
-            <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="claro-pay-checkbox" />
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Card de Total -->
-        <div class="total-card">
-          <div id="price-breakdown"></div>
-          <hr class="total-separator" style="display: none;" />
-          <div class="total-final">
-            <h2>Total Mensual</h2>
-            <p id="total-price">$0.00</p>
-          </div>
-
-          <!-- Action buttons -->
-          <div class="action-buttons">
-            <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
-            <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
-              Compartir</button>
-            <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
-            <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
-          </div>
-
-          <!-- Chart container (hidden by default) -->
-          <div id="chart-container" class="chart-container" style="display: none;">
-            <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Sticky Total Summary -->
-    <div id="sticky-total-bar" class="sticky-total-bar">
-      <div class="sticky-total-content">
-        <div class="sticky-total-info">
-          <span class="sticky-label">Total estimado</span>
-          <span id="sticky-price" class="sticky-price">$0.00</span>
-        </div>
-        <button id="sticky-copy-btn" class="sticky-action-btn">📋 Copiar</button>
-      </div>
-    </div>
 
     <!-- Tab: Carga de Cliente -->
     <section id="tab-carga" class="tab-content" role="tabpanel" hidden>
@@ -222,7 +104,7 @@
     </section>
 
     <!-- Tab: Herramientas -->
-    <section id="tab-herramientas" class="tab-content" role="tabpanel" hidden>
+    <section id="tab-herramientas" class="tab-content active" role="tabpanel">
       <div class="carga-section">
 
         <!-- Vista: lista de herramientas -->
@@ -232,6 +114,117 @@
 
           <div id="herramientas-buttons" class="carga-buttons">
             <!-- Los botones se cargan dinámicamente desde links.json -->
+          </div>
+        </div>
+
+        <!-- Vista: panel del Cotizador (anteriormente Calculadora) -->
+        <div id="calculator-panel" class="internal-form" style="display:none;">
+          <header class="form-header">
+            <button id="calc-btn-cerrar" class="back-btn">← Volver</button>
+            <h3 class="form-title">🧮 Cotizador</h3>
+          </header>
+
+          <div class="carga-section">
+            <p class="section-subtitle">Calcula el presupuesto personalizado para tu cliente</p>
+
+            <!-- Card de Internet y TV -->
+            <div class="card">
+              <h2 class="card-title">Internet y TV</h2>
+              <div class="option">
+                <label for="baf-type">Tipo de Plan</label>
+                <select id="baf-type">
+                  <option value="RESIDENCIAL">BAF Residencial</option>
+                  <option value="IP_DINAMICA">BAF IP Dinámica</option>
+                  <option value="IP_FIJA">BAF IP Fija</option>
+                </select>
+              </div>
+              <div class="option-pill">
+                <label>Velocidad de Internet</label>
+                <div class="pill-group" data-target="#internet-speed">
+                  <button type="button" class="pill-btn" data-value="no">NO</button>
+                  <button type="button" class="pill-btn" data-value="100">100MB</button>
+                  <button type="button" class="pill-btn" data-value="300">300MB</button>
+                  <button type="button" class="pill-btn" data-value="600">600MB</button>
+                </div>
+                <select id="internet-speed" class="hidden-select">
+                  <option value="no">No incluir</option>
+                  <option value="100">100 MB</option>
+                  <option value="300">300 MB</option>
+                  <option value="600">600 MB</option>
+                </select>
+              </div>
+              <div class="option-pill">
+                <label>Servicio de TV</label>
+                <div class="pill-group" data-target="#add-tv">
+                  <button type="button" class="pill-btn" data-value="no">NO</button>
+                  <button type="button" class="pill-btn" data-value="1">1 DECO</button>
+                  <button type="button" class="pill-btn" data-value="2">2 DECOS</button>
+                  <button type="button" class="pill-btn" data-value="3">3 DECOS</button>
+                </div>
+                <select id="add-tv" class="hidden-select">
+                  <option value="no">No incluir</option>
+                  <option value="1">1 Deco</option>
+                  <option value="2">2 Decos</option>
+                  <option value="3">3 Decos</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Sección de Portabilidad -->
+            <div id="portability-section"></div>
+
+            <button id="add-line-btn" class="add-line-btn">+ Añadir Línea Móvil</button>
+
+            <!-- Opciones de Pago -->
+            <div class="card">
+              <h2 class="card-title">Beneficios</h2>
+              <div class="option">
+                <label for="has-claro-abono">Descuento Abono Claro</label>
+                <select id="has-claro-abono">
+                  <option value="no">No tiene</option>
+                  <option value="1">1 Línea</option>
+                  <option value="2">2 o más</option>
+                </select>
+              </div>
+              <div class="payment-option">
+                <label for="pack-futbol-checkbox">Añadir Pack Fútbol</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="pack-futbol-checkbox" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="payment-option">
+                <label for="claro-pay-checkbox">Pagar con Claro Pay</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="claro-pay-checkbox" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Card de Total -->
+            <div class="total-card">
+              <div id="price-breakdown"></div>
+              <hr class="total-separator" style="display: none;" />
+              <div class="total-final">
+                <h2>Total Mensual</h2>
+                <p id="total-price">$0.00</p>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="action-buttons">
+                <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
+                <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
+                  Compartir</button>
+                <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
+                <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
+              </div>
+
+              <!-- Chart container (hidden by default) -->
+              <div id="chart-container" class="chart-container" style="display: none;">
+                <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -397,13 +390,10 @@
 
     <!-- Navigation Tabs (Bottom) -->
     <nav class="tabs-nav" role="tablist">
-      <button class="tab-btn active" data-tab="calculadora" role="tab" aria-selected="true">
-        🧮 Calculadora
-      </button>
       <button class="tab-btn" data-tab="carga" role="tab" aria-selected="false">
         📋 Carga
       </button>
-      <button class="tab-btn" data-tab="herramientas" role="tab" aria-selected="false">
+      <button class="tab-btn active" data-tab="herramientas" role="tab" aria-selected="true">
         🔧 Herramientas
       </button>
       <button class="tab-btn" data-tab="crm" role="tab" aria-selected="false">
@@ -411,6 +401,17 @@
       </button>
     </nav>
 
+  </div>
+
+  <!-- Sticky Total Summary (Moved out of tab-calculadora but logic will control visibility) -->
+  <div id="sticky-total-bar" class="sticky-total-bar" style="display: none;">
+    <div class="sticky-total-content">
+      <div class="sticky-total-info">
+        <span class="sticky-label">Total estimado</span>
+        <span id="sticky-price" class="sticky-price">$0.00</span>
+      </div>
+      <button id="sticky-copy-btn" class="sticky-action-btn">📋 Copiar</button>
+    </div>
   </div>
 
   <!-- Modal for configuration -->

@@ -83,6 +83,10 @@ function initializeApp() {
   // Calcular precio inicial
   hideLoading();
   calculateTotalPrice();
+
+  // Asegurar estado inicial correcto (Herramientas por defecto)
+  updatePageTitle('herramientas');
+  updateStickyBarVisibility();
 }
 
 // ========== Cálculo de Precios ==========
@@ -263,25 +267,57 @@ function initTabs() {
         content.hidden = !isTarget;
       });
 
-      // Gestionar visibilidad del Sticky Total Bar (solo en Cotizador)
-      const stickyBar = document.getElementById('sticky-total-bar');
-      if (stickyBar) {
-        stickyBar.style.display = targetTab === 'calculadora' ? 'flex' : 'none';
-      }
+      // Al cambiar de tab principal, siempre ocultar paneles internos
+      hideInternalPanels();
+
+      // Gestionar visibilidad del Sticky Total Bar
+      updateStickyBarVisibility();
 
       // Actualizar título de la página
-      if (targetTab === 'calculadora') {
-        pageTitle.textContent = 'Cotizador';
-      } else if (targetTab === 'carga') {
-        pageTitle.textContent = 'Carga de Cliente';
-      } else if (targetTab === 'herramientas') {
-        pageTitle.textContent = 'Herramientas';
-      } else if (targetTab === 'crm') {
-        pageTitle.textContent = 'CRM';
-      }
+      updatePageTitle(targetTab);
     });
   });
 }
+
+/**
+ * Oculta todos los paneles internos (Mapa, Cotizador, etc)
+ */
+function hideInternalPanels() {
+  const panels = document.querySelectorAll('.internal-form');
+  panels.forEach(p => p.style.display = 'none');
+
+  const lists = ['herramientas-lista', 'carga-buttons'];
+  lists.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+  });
+}
+
+/**
+ * Actualiza el título de la página según el tab
+ */
+function updatePageTitle(tab) {
+  const pageTitle = document.getElementById('page-title');
+  if (!pageTitle) return;
+
+  const titles = {
+    'carga': 'Carga de Cliente',
+    'herramientas': 'Herramientas',
+    'crm': 'CRM'
+  };
+  pageTitle.textContent = titles[tab] || 'Claro Asesor';
+}
+
+function updateStickyBarVisibility() {
+  const stickyBar = document.getElementById('sticky-total-bar');
+  const panel = document.getElementById('calculator-panel');
+  if (!stickyBar || !panel) return;
+
+  // Comprobar si el panel está visible (no tiene display: none)
+  const isCalculatorVisible = window.getComputedStyle(panel).display !== 'none';
+  stickyBar.style.display = isCalculatorVisible ? 'flex' : 'none';
+}
+
 
 // ========== Carga de Botones Dinámicos ==========
 
@@ -292,7 +328,7 @@ function initTabs() {
  */
 async function loadLinkButtons(containerId, dataKey) {
   try {
-    const response = await fetch('links.json');
+    const response = await fetch(`links.json?v=${Date.now()}`);
     if (!response.ok) throw new Error('No se pudo cargar links.json');
 
     const data = await response.json();
@@ -320,22 +356,36 @@ async function loadLinkButtons(containerId, dataKey) {
       // Handle internal forms and special actions
       if (item.action === 'internal-form' && item.targetId) {
         link.href = '#';
+        link.target = '_self';
         link.addEventListener('click', (e) => {
           e.preventDefault();
           showInternalForm(item.targetId);
         });
       } else if (item.action === 'open-dashboard') {
         link.href = '#';
+        link.target = '_self';
         link.addEventListener('click', (e) => {
           e.preventDefault();
           if (typeof window.abrirDashboard === 'function') {
             window.abrirDashboard();
           }
         });
+      } else if (item.action === 'open-calculator') {
+        link.href = '#';
+        link.target = '_self';
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          showCalculator();
+        });
       } else {
         link.href = item.url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
+        // Solo para URLs externas sin acción especial
+        if (item.url && item.url !== '#') {
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        } else {
+          link.target = '_self';
+        }
       }
 
       // Create elements safely to prevent XSS
@@ -372,6 +422,9 @@ async function loadLinkButtons(containerId, dataKey) {
 
     // Initialize logic for Teccom Form
     initTeccomForm();
+
+    // Initialize logic for Calculator Form
+    initCalculatorForm();
 
   } catch (error) {
     console.error(`Error cargando botones de ${dataKey}:`, error);
@@ -530,6 +583,38 @@ function hideInternalForm(formId) {
   if (buttonsContainer && form) {
     form.style.display = 'none';
     fadeIn(buttonsContainer);
+  }
+}
+
+// ========== Cotizador (Herramientas) ==========
+
+function initCalculatorForm() {
+  const closeBtn = document.getElementById('calc-btn-cerrar');
+  closeBtn?.addEventListener('click', hideCalculator);
+}
+
+function showCalculator() {
+  const lista = document.getElementById('herramientas-lista');
+  const panel = document.getElementById('calculator-panel');
+
+  if (lista && panel) {
+    lista.style.display = 'none';
+    panel.style.display = 'block';
+    fadeIn(panel);
+    updateStickyBarVisibility();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function hideCalculator() {
+  const lista = document.getElementById('herramientas-lista');
+  const panel = document.getElementById('calculator-panel');
+
+  if (lista && panel) {
+    panel.style.display = 'none';
+    lista.style.display = 'flex';
+    fadeIn(lista);
+    updateStickyBarVisibility();
   }
 }
 

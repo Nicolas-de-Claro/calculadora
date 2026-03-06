@@ -93,6 +93,15 @@
             "color": "#FF5722"
         },
         {
+            "id": "btn-abrir-cotizador",
+            "nombre": "Cotizador",
+            "descripcion": "Cálculo de presupuesto personalizado",
+            "icono": "🧮",
+            "url": "#",
+            "action": "open-calculator",
+            "color": "#D32F2F"
+        },
+        {
             "id": "consultar-compania",
             "nombre": "Consultar Compañía Celular",
             "descripcion": "Verificar operador de número móvil",
