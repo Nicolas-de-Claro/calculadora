@@ -952,6 +952,7 @@ button.success {
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
+    color: var(--text-primary);
 }
 
 .form-content {
@@ -1298,7 +1299,7 @@ button.success {
     margin: 0;
 }
 /* ── DASHBOARD: MAPA DE OPORTUNIDADES (PWA INTEGRATION) ── */
-.dashboard-expanded { background: #121212 !important; }
+.dashboard-expanded { background: var(--background-color); }
 
 .db-map-header-actions {
   display: flex;
