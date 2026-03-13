@@ -11,6 +11,7 @@ let dbAllMarkersData = [];
 let dbCercanasCached = [];
 let dbSortState = { col: null, dir: 1 };
 let dbGeoWatchId = null;
+let dbActiveFilters = new Set(['todas']);
 
 let dbLightTileLocal = null;
 let dbDarkTileLocal = null;
@@ -330,38 +331,59 @@ function dbDibujarPinesMapa(pinesData) {
 function dbAplicarFiltroMapa(filtroTipo) {
     if (!dbAllMarkersData || dbAllMarkersData.length === 0) return;
     
+    // Toggle filter logic
+    if (filtroTipo === 'todas') {
+        dbActiveFilters.clear();
+        dbActiveFilters.add('todas');
+    } else {
+        dbActiveFilters.delete('todas');
+        if (dbActiveFilters.has(filtroTipo)) {
+            dbActiveFilters.delete(filtroTipo);
+        } else {
+            dbActiveFilters.add(filtroTipo);
+        }
+        
+        // If all specific filters are disabled, fallback to 'todas'
+        if (dbActiveFilters.size === 0) {
+            dbActiveFilters.add('todas');
+        }
+    }
+
     // Manage UI active state
-    document.querySelectorAll('.db-filter-btn').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.querySelector(`.db-filter-btn[data-filter="${filtroTipo}"]`);
-    if(activeBtn) activeBtn.classList.add('active');
+    document.querySelectorAll('.db-filter-btn').forEach(btn => {
+        if (dbActiveFilters.has(btn.dataset.filter)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 
+    // Apply combined filters
     let filterData = [];
-
-    switch(filtroTipo) {
-        case 'nuevas':
-            filterData = dbAllMarkersData.filter(p => p.puertosLibres === (p.puertosTotales || 8));
-            break;
-        case 'varias':
-            filterData = dbAllMarkersData.filter(p => p.puertosLibres > 1 && p.puertosLibres < (p.puertosTotales || 8));
-            break;
-        case 'urgente':
-            filterData = dbAllMarkersData.filter(p => p.puertosLibres === 1);
-            break;
-        case 'saturadas':
-            filterData = dbAllMarkersData.filter(p => p.puertosLibres === 0);
-            break;
-        case 'todas':
-        default:
-            filterData = dbAllMarkersData.filter(p => p.puertosLibres > 0 || filtroTipo === 'todas'); 
-            break;
+    if (dbActiveFilters.has('todas')) {
+        filterData = dbAllMarkersData.filter(p => p.puertosLibres > 0);
+    } else {
+        filterData = dbAllMarkersData.filter(p => {
+            const pl = p.puertosLibres || 0;
+            const pt = p.puertosTotales || 8;
+            let keep = false;
+            if (dbActiveFilters.has('nuevas') && pl === pt && pt > 0) keep = true;
+            if (dbActiveFilters.has('varias') && pl > 1 && pl < pt) keep = true;
+            if (dbActiveFilters.has('urgente') && pl === 1) keep = true;
+            if (dbActiveFilters.has('saturadas') && pl === 0) keep = true;
+            return keep;
+        });
     }
 
     dbDibujarPinesMapa(filterData);
-    document.getElementById('db-map-title').innerHTML = `🗺️ Mapa — Filtro: <b>${filtroTipo.charAt(0).toUpperCase() + filtroTipo.slice(1)}</b>`;
+    
+    // Manage dynamic Title and Reset Button
+    let activeNames = Array.from(dbActiveFilters).map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ');
+    document.getElementById('db-map-title').innerHTML = `🗺️ Mapa — Filtro: <b>${activeNames}</b>`;
     document.getElementById('db-btn-reset').classList.remove('db-hidden');
 
     // Special case for 'todas' to reset the map title correctly
-    if(filtroTipo === 'todas') {
+    if(dbActiveFilters.has('todas')) {
         document.getElementById('db-map-title').textContent = '🗺️ Mapa Interactivo en Terreno';
         document.getElementById('db-btn-reset').classList.add('db-hidden');
     }
@@ -427,10 +449,13 @@ function dbProcesarUbicacion(position, isAuto) {
     dbUserMarker = L.marker([lat, lon]).addTo(dbMap).bindPopup("<b>👋 ¡Estás acá!</b>");
     if (!isAuto) dbUserMarker.openPopup();
     
-    dbUserCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400 }).addTo(dbMap);
+    dbUserCircle = L.circle([lat, lon], { color:'dodgerblue', fillColor:'dodgerblue', fillOpacity:0.1, radius:400, interactive: false }).addTo(dbMap);
+    dbUserCircle.bringToBack();
     
-    // Si es auto-seguimiento o primera vez, centrar mapa.
-    dbMap.setView([lat, lon], 16);
+    // Si es seguimiento inicial o el botón manual, centrar mapa.
+    if (!isAuto) {
+        dbMap.setView([lat, lon], 16);
+    }
 
     const cercanas = [];
     Object.values(dbDataHoy).forEach(p => {
