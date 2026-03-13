@@ -327,17 +327,46 @@ function updateStickyBarVisibility() {
  * @param {string} dataKey - Clave del array en links.json
  */
 async function loadLinkButtons(containerId, dataKey) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // 1. Mostrar Skeletons
+  container.innerHTML = `
+    <div class="carga-link-btn" style="pointer-events: none;">
+      <div class="carga-link-icon skeleton" style="border-radius: 12px;"></div>
+      <div class="carga-link-content" style="gap: 5px;">
+        <div class="skeleton" style="height: 1.1rem; width: 60%;"></div>
+        <div class="skeleton" style="height: 0.85rem; width: 80%;"></div>
+      </div>
+    </div>
+    <div class="carga-link-btn" style="pointer-events: none;">
+      <div class="carga-link-icon skeleton" style="border-radius: 12px;"></div>
+      <div class="carga-link-content" style="gap: 5px;">
+        <div class="skeleton" style="height: 1.1rem; width: 50%;"></div>
+        <div class="skeleton" style="height: 0.85rem; width: 90%;"></div>
+      </div>
+    </div>
+  `;
+
+  // ID del empty state según el contenedor
+  const emptyStateId = containerId.replace('-buttons', '-empty');
+  const emptyStateEl = document.getElementById(emptyStateId);
+  if (emptyStateEl) emptyStateEl.style.display = 'none';
+
   try {
     const response = await fetch(`links.json?v=${Date.now()}`);
     if (!response.ok) throw new Error('No se pudo cargar links.json');
 
     const data = await response.json();
-    const container = document.getElementById(containerId);
-
-    if (!container || !data[dataKey]) return;
+    
+    // 2. Verificar datos vacíos
+    if (!data[dataKey] || data[dataKey].length === 0) {
+      container.innerHTML = '';
+      if (emptyStateEl) fadeIn(emptyStateEl);
+      return;
+    }
 
     container.innerHTML = '';
-
     let lastCategory = null;
 
     data[dataKey].forEach(item => {
@@ -428,6 +457,10 @@ async function loadLinkButtons(containerId, dataKey) {
 
   } catch (error) {
     console.error(`Error cargando botones de ${dataKey}:`, error);
+    container.innerHTML = '';
+    const emptyStateId = containerId.replace('-buttons', '-empty');
+    const emptyStateEl = document.getElementById(emptyStateId);
+    if (emptyStateEl) fadeIn(emptyStateEl);
   }
 }
 

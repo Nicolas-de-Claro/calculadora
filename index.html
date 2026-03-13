@@ -45,6 +45,10 @@
         <div id="carga-buttons" class="carga-buttons">
           <!-- Los botones se cargan dinámicamente desde links.json -->
         </div>
+        <div id="carga-empty" class="empty-state" style="display: none;">
+          <div class="empty-icon">📂</div>
+          <p>No hay formularios de carga disponibles.</p>
+        </div>
 
         <!-- Formulario Interno: TECCOM ACOMETIMIENTOS -->
         <div id="teccom-form" class="internal-form" style="display: none;">
@@ -61,7 +65,7 @@
 
             <div class="input-group">
               <label for="teccom-contact">Número de Contacto</label>
-              <input type="tel" id="teccom-contact" placeholder="Ej: 381..." />
+              <input type="tel" id="teccom-contact" placeholder="Ej: 381..." inputmode="numeric" />
             </div>
 
             <div class="input-group">
@@ -77,11 +81,11 @@
             <div class="row-2-col">
               <div class="input-group">
                 <label for="teccom-floors">Cantidad de Pisos</label>
-                <input type="number" id="teccom-floors" min="0" />
+                <input type="number" id="teccom-floors" min="0" inputmode="numeric" pattern="[0-9]*" />
               </div>
               <div class="input-group">
                 <label for="teccom-apts">Dptos por Piso</label>
-                <input type="number" id="teccom-apts" min="0" />
+                <input type="number" id="teccom-apts" min="0" inputmode="numeric" pattern="[0-9]*" />
               </div>
             </div>
 
@@ -114,6 +118,10 @@
 
           <div id="herramientas-buttons" class="carga-buttons">
             <!-- Los botones se cargan dinámicamente desde links.json -->
+          </div>
+          <div id="herramientas-empty" class="empty-state" style="display: none;">
+            <div class="empty-icon">🔧</div>
+            <p>No hay herramientas disponibles.</p>
           </div>
         </div>
 
@@ -392,6 +400,10 @@
 
         <div id="crm-buttons" class="carga-buttons">
           <!-- Los botones se cargan dinámicamente desde links.json -->
+        </div>
+        <div id="crm-empty" class="empty-state" style="display: none;">
+          <div class="empty-icon">📊</div>
+          <p>No hay enlaces de CRM configurados.</p>
         </div>
       </div>
     </section>

@@ -156,13 +156,41 @@ select {
     font-size: 1rem;
     -webkit-appearance: none;
     appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23757575%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 0.8rem center;
-    background-size: 0.8em;
+    
+    /* Dynamic contrast SVG arrow using CSS mask */
+    background-image: none;
+    background-color: var(--input-background);
+    position: relative;
     cursor: pointer;
     transition: var(--theme-transition);
     white-space: nowrap;
+}
+
+/* Custom Arrow using pseudo-element for mask */
+.option select, .internal-form select, .input-group select {
+    background: var(--input-background);
+}
+
+.option::after, .input-group::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.8em;
+    height: 0.8em;
+    background-color: var(--text-secondary);
+    mask-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    -webkit-mask-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    pointer-events: none;
+}
+.option, .input-group {
+    position: relative;
+}
     text-overflow: ellipsis;
 }
 
@@ -728,6 +756,9 @@ button.success {
 .tab-btn.active {
     color: var(--primary-color);
     background-color: transparent;
+    border-top: 3px solid var(--primary-color);
+    transform: scale(1.05);
+    border-radius: 0;
 }
 
 /* Add padding to main container to account for fixed bottom nav */
@@ -858,6 +889,19 @@ button.success {
 
     .link-category-separator {
         grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .option, .option-pill, .payment-option {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .option label, .option-pill label, .payment-option label {
+        width: 100%;
+        margin-bottom: 0.2rem;
     }
 }
 
@@ -1193,6 +1237,18 @@ button.success {
 .db-mapa-wrapper {
     position: relative;
     width: 100%;
+    height: 55vh;
+    min-height: 300px;
+    max-height: 600px;
+}
+
+#db-mapa-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    z-index: 1;
 }
 
 .db-fullscreen-btn {
