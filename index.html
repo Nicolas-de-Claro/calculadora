@@ -214,16 +214,12 @@
               <!-- Action buttons -->
               <div class="action-buttons">
                 <button id="copy-summary-btn" class="copy-btn" aria-label="Copiar resumen">📋 Copiar</button>
-                <button id="share-summary-btn" class="copy-btn" aria-label="Compartir resumen" style="display: none;">🔗
-                  Compartir</button>
+
                 <button id="export-pdf-btn" class="copy-btn" aria-label="Exportar a PDF">📄 PDF</button>
-                <button id="toggle-chart-btn" class="copy-btn" aria-label="Mostrar/ocultar gráfico">📊 Gráfico</button>
+
               </div>
 
-              <!-- Chart container (hidden by default) -->
-              <div id="chart-container" class="chart-container" style="display: none;">
-                <canvas id="cost-chart" aria-label="Gráfico de distribución de costos"></canvas>
-              </div>
+
             </div>
           </div>
         </div>
@@ -241,7 +237,19 @@
           <div style="margin-bottom: 16px;">
             <div id="db-drop-zone" class="db-drop-zone">
               <button id="db-btn-limpiar" class="db-btn-limpiar">✕ Limpiar</button>
-              <span class="db-icon">📡</span>
+              <div class="db-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Base Station -->
+                  <path d="M40 85 L60 85 L55 50 L45 50 Z" fill="currentColor" opacity="0.8"/>
+                  <!-- Antenna Array -->
+                  <circle cx="50" cy="45" r="8" fill="var(--primary-color)"/>
+                  <path d="M50 45 L50 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                  <!-- Signal Waves -->
+                  <path class="signal-wave wave-1" d="M35 30 A20 20 0 0 1 65 30" fill="none" stroke="var(--primary-color)" stroke-width="3" stroke-linecap="round"/>
+                  <path class="signal-wave wave-2" d="M25 20 A35 35 0 0 1 75 20" fill="none" stroke="var(--primary-color)" stroke-width="3" stroke-linecap="round"/>
+                  <path class="signal-wave wave-3" d="M15 10 A50 50 0 0 1 85 10" fill="none" stroke="var(--primary-color)" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
               <h3>Cargar escaneo de splitters</h3>
               <p>Arrastrá el archivo JSON capturado o tocá el botón para seleccionarlo</p>
               <button id="db-btn-cargar" class="db-btn-cargar">
