@@ -164,6 +164,7 @@ select {
     cursor: pointer;
     transition: var(--theme-transition);
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* Custom Arrow using pseudo-element for mask */
@@ -190,8 +191,6 @@ select {
 }
 .option, .input-group {
     position: relative;
-}
-    text-overflow: ellipsis;
 }
 
 .toggle-switch {
@@ -1791,4 +1790,86 @@ input:checked + .db-slider:before {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+/* ========== Splash Screen ========== */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.splash-logo {
+    width: 120px;
+    height: 120px;
+    filter: drop-shadow(0 8px 16px rgba(211, 47, 47, 0.4));
+    animation: splash-float 3s ease-in-out infinite;
+}
+
+.splash-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+    margin: 0;
+    opacity: 0;
+    animation: splash-text-fade 0.8s ease-out 0.5s forwards;
+}
+
+@keyframes splash-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes splash-text-fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Splash Signal Animations */
+.splash-signal {
+    transform-origin: 50% 70px;
+    opacity: 0;
+}
+
+.wave-outer {
+    animation: signal-broadcast 2s ease-out infinite;
+    animation-delay: 0.6s;
+}
+
+.wave-middle {
+    animation: signal-broadcast 2s ease-out infinite;
+    animation-delay: 0.3s;
+}
+
+.wave-inner {
+    animation: signal-pulse 2s ease-out infinite;
+    opacity: 1;
+}
+
+@keyframes signal-broadcast {
+    0% { opacity: 0; transform: scale(0.8); }
+    30% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); }
+}
+
+@keyframes signal-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
 }

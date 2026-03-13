@@ -97,11 +97,18 @@ export function showLoading() {
 }
 
 /**
- * Oculta el skeleton loading
+ * Oculta el skeleton loading y el Splash Screen
  */
 export function hideLoading() {
     const priceElement = document.querySelector(DOM_SELECTORS.TOTAL_PRICE);
-    priceElement.classList.remove('skeleton');
+    if(priceElement) priceElement.classList.remove('skeleton');
+    
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        splash.style.opacity = '0';
+        splash.style.visibility = 'hidden';
+        setTimeout(() => splash.remove(), 500);
+    }
 }
 
 /**
